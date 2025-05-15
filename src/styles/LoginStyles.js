@@ -1,0 +1,87 @@
+import { StyleSheet } from 'react-native';
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 30,
+  },
+  title: {
+    fontSize: 35,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    backgroundColor: '#fff',
+    textAlign: 'center',
+    padding: 5,
+    marginLeft: 75,
+    marginRight: 75,
+    borderRadius: 10,
+    fontFamily: 'Arial',
+    color: '#333',
+  },
+  input: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 14,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    fontSize: 16,   
+  },
+  button: {
+    backgroundColor: '#13b9ab',
+    padding: 14,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginBottom: 10,   // Color negro
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 20,
+  },
+  forgotPassword: {
+    color: '#007bff',
+    textAlign: 'center',
+    marginTop: 10,
+    fontSize: 20,
+    textDecorationLine: 'underline',
+  },
+  image: {
+    width: 200,
+    height: 200,
+    marginBottom: 20,
+    borderRadius: 20,
+    alignSelf: 'center',  
+  },
+  picker: {
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    padding: 1,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    fontSize: 16,
+    fontFamily: 'Arial',
+    color: '#333',
+  },
+  background: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
+  },
+  passwordInput: {
+    flex: 1,
+    paddingVertical: 14,
+    fontSize: 16,
+  },  
+});
