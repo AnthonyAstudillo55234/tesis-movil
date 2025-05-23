@@ -1,28 +1,34 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import LoginScreen from './src/screens/Login.js';
 import AdminScreen from './src/screens/Admin.js';
 
-const Stack = createStackNavigator();
+import RepresentanteHome from './src/screens/Representante.js';
+import EstudiantesAsignados from './src/components/EstudiantesAsignados.js';
+import Calificaciones from './src/components/Calificaciones.js';
+import Asistencias from './src/components/Asistencias.js';
+import Observaciones from './src/components/Observaciones.js';
+
+const Stack = createNativeStackNavigator();
 
 const App = () => {
-  const [userRole, setUserRole] = useState('admin'); // temporal para pruebas
-
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        {/* Ocultar encabezado en la pantalla de login */}
         <Stack.Screen 
           name="Login" 
           component={LoginScreen} 
           options={{ headerShown: false }} 
         />
-        
-        {/* Mostrar solo si el usuario es admin */}
-        {userRole === 'admin' && (
-          <Stack.Screen name="Admin" component={AdminScreen} />
-        )}
+
+        <Stack.Screen name="Admin" component={AdminScreen} />
+        <Stack.Screen name="Representante" component={RepresentanteHome} />
+        <Stack.Screen name="EstudiantesAsignados" component={EstudiantesAsignados} />
+        <Stack.Screen name="Calificaciones" component={Calificaciones} />
+        <Stack.Screen name="Asistencias" component={Asistencias} />
+        <Stack.Screen name="Observaciones" component={Observaciones} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,12 +1,11 @@
-// src/styles/AdminStyles.js
-
 import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    padding: 30,
+    marginTop: 10,
+    justifyContent: 'flex-start',
+    padding: 10,
     backgroundColor: '#f7f7f7',
   },
   title: {

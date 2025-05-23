@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 8,
     alignItems: 'center',
-    marginBottom: 10,   // Color negro
+    marginBottom: 10,   
   },
   buttonText: {
     color: '#fff',

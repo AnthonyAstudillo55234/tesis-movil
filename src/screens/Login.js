@@ -67,11 +67,16 @@ const LoginScreen = () => {
 
       if (response.ok) {
         await AsyncStorage.setItem('token', data.token); 
+        await AsyncStorage.setItem('rol', data.rol); // guarda el rol
+      
         Alert.alert('Éxito', data.message || 'Login exitoso');
+      
         if (data.rol === 'administrador') {
           navigation.navigate('Admin');
+        } else if (data.rol === 'representante') {
+          navigation.navigate('Representante'); // Asegúrate de tener esta pantalla creada
         } else {
-          Alert.alert('Info', 'Rol no soportado en esta app');
+          Alert.alert('Info', 'Rol no soportado');
         }
       } else {
         Alert.alert('Error', data.message || 'Credenciales inválidas');

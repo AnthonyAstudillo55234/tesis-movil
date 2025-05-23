@@ -96,7 +96,7 @@ const AdminAttendanceScreen = () => {
         setSelectedCurso('');
         setEstudiantes([]);
       } else {
-        Alert.alert('Error', data.message || 'No se pudo registrar la asistencia');
+        Alert.alert('Error', data.message || 'Asistencia ya registrada');
       }
     } catch (error) {
       console.error('Error al registrar asistencia:', error);
