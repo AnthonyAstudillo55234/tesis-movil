@@ -11,6 +11,10 @@ import Calificaciones from './src/components/Calificaciones.js';
 import Asistencias from './src/components/Asistencias.js';
 import Observaciones from './src/components/Observaciones.js';
 
+import RepresentantePerfil from './src/components/RepresentantePerfil.js';
+import ActualizarDatos from './src/components/ActualizarDatos.js';
+import CambiarPassword from './src/components/CambiarPassword.js';
+
 const Stack = createNativeStackNavigator();
 
 const App = () => {
@@ -22,13 +26,15 @@ const App = () => {
           component={LoginScreen} 
           options={{ headerShown: false }} 
         />
-
         <Stack.Screen name="Admin" component={AdminScreen} />
         <Stack.Screen name="Representante" component={RepresentanteHome} />
-        <Stack.Screen name="EstudiantesAsignados" component={EstudiantesAsignados} />
+        <Stack.Screen name="Estudiantes Asignados" component={EstudiantesAsignados} />
         <Stack.Screen name="Calificaciones" component={Calificaciones} />
         <Stack.Screen name="Asistencias" component={Asistencias} />
         <Stack.Screen name="Observaciones" component={Observaciones} />
+        <Stack.Screen name="Perfil" component={RepresentantePerfil} />
+        <Stack.Screen name="Actualizar Datos" component={ActualizarDatos} />
+        <Stack.Screen name="Cambiar Contrasena" component={CambiarPassword} />
       </Stack.Navigator>
     </NavigationContainer>
   );

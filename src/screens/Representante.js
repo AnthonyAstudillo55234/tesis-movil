@@ -48,14 +48,14 @@ const RepresentanteHome = () => {
       {/* NUEVAS OPCIONES */}
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Actualizar Datos Representante')}
+        onPress={() => navigation.navigate('Actualizar Datos')}
       >
         <Text style={styles.buttonText}>Actualizar Datos</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Cambiar Contrasena Representante')}
+        onPress={() => navigation.navigate('Cambiar Contrasena')}
       >
         <Text style={styles.buttonText}>Cambiar Contraseña</Text>
       </TouchableOpacity>
