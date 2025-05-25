@@ -1,65 +1,31 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import styles from '../styles/RepresentanteStyles';
+import CurvedHeaderLayout from '../components/CurvedHeaderLayout';
 
 const RepresentanteHome = () => {
   const navigation = useNavigation();
 
+  const menuItems = [
+    { icon: 'person-outline', label: 'Perfil', onPress: () => navigation.navigate('Perfil') },
+    { icon: 'school-outline', label: 'Estudiantes Asignados', onPress: () => navigation.navigate('Estudiantes Asignados') },
+    { icon: 'book-outline', label: 'Calificaciones', onPress: () => navigation.navigate('Calificaciones') },
+    { icon: 'checkmark-done-outline', label: 'Asistencias', onPress: () => navigation.navigate('Asistencias') },
+    { icon: 'alert-circle-outline', label: 'Observaciones', onPress: () => navigation.navigate('Observaciones') },
+    { icon: 'create-outline', label: 'Actualizar Datos', onPress: () => navigation.navigate('Actualizar Datos') },
+    { icon: 'key-outline', label: 'Cambiar Contraseña', onPress: () => navigation.navigate('Cambiar Contrasena') },
+  ];
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Representante</Text>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Perfil')}
-      >
-        <Text style={styles.buttonText}>Perfil</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Estudiantes Asignados')}
-      >
-        <Text style={styles.buttonText}>Estudiantes Asignados</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Calificaciones')}
-      >
-        <Text style={styles.buttonText}>Calificaciones</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Asistencias')}
-      >
-        <Text style={styles.buttonText}>Asistencias</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Observaciones')}
-      >
-        <Text style={styles.buttonText}>Observaciones</Text>
-      </TouchableOpacity>
-
-      {/* NUEVAS OPCIONES */}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Actualizar Datos')}
-      >
-        <Text style={styles.buttonText}>Actualizar Datos</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Cambiar Contrasena')}
-      >
-        <Text style={styles.buttonText}>Cambiar Contraseña</Text>
-      </TouchableOpacity>
-    </View>
+    <CurvedHeaderLayout
+      userName="Representante"
+      avatarUrl="https://cdn-icons-png.flaticon.com/512/3884/3884879.png"
+      menuItems={menuItems.map(item => ({
+        icon: item.icon,
+        label: item.label,
+        onPress: item.onPress
+      }))}
+      onViewPress={() => {}}
+    />
   );
 };
 

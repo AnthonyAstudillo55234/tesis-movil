@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import styles from '../styles/RepresentanteStyles'; // Puedes mantener estilos generales
+import CurvedHeaderLayout from '../components/CurvedHeaderLayout';
 
 const RepresentantePerfil = () => {
   const [perfil, setPerfil] = useState(null);
@@ -28,53 +28,46 @@ const RepresentantePerfil = () => {
   if (loading) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
 
   return (
-    <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', padding: 20, backgroundColor: '#f0f2f5' }}>
-      <View style={{
-        backgroundColor: 'white',
-        borderRadius: 15,
-        padding: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 5 },
-        shadowOpacity: 0.15,
-        shadowRadius: 10,
-        elevation: 8,
-      }}>
-        <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 15, textAlign: 'center', color: '#333' }}>
-          Mi Perfil
-        </Text>
+    <CurvedHeaderLayout
+      userName={`${perfil.nombre} ${perfil.apellido}`}
+      avatarUrl="https://cdn-icons-png.flaticon.com/512/3884/3884879.png"
+      showBackButton={true}
+       showViewButton={false}
+      content={
+        <View contentContainerStyle={{ padding: 20 }}>
+          <View style={{
+            backgroundColor: 'white',
+            borderRadius: 15,
+            padding: 20,
+            marginTop: 30,
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 5 },
+            shadowOpacity: 0.15,
+            shadowRadius: 10,
+            elevation: 8,
+          }}>
+            <Text style={{ fontSize: 24, fontWeight: 'bold', marginBottom: 15, textAlign: 'center', color: '#333' }}>
+              Mi Perfil
+            </Text>
 
-        {/* Nombre y Apellido */}
-        <View style={{ marginBottom: 15, borderBottomWidth: 1, borderBottomColor: '#ddd', paddingBottom: 10 }}>
-          <Text style={{ fontSize: 18, fontWeight: '600', color: '#555' }}>Nombre Completo</Text>
-          <Text style={{ fontSize: 16, color: '#111' }}>{perfil.nombre} {perfil.apellido}</Text>
+            <Field label="Nombre Completo" value={`${perfil.nombre} ${perfil.apellido}`} />
+            <Field label="Email" value={perfil.email} />
+            <Field label="Cédula" value={perfil.cedula} />
+            <Field label="Dirección" value={perfil.direccion} />
+            <Field label="Teléfono" value={perfil.telefono} />
+          </View>
         </View>
-
-        {/* Email */}
-        <View style={{ marginBottom: 15, borderBottomWidth: 1, borderBottomColor: '#ddd', paddingBottom: 10 }}>
-          <Text style={{ fontSize: 18, fontWeight: '600', color: '#555' }}>Email</Text>
-          <Text style={{ fontSize: 16, color: '#111' }}>{perfil.email}</Text>
-        </View>
-
-        {/* Cédula */}
-        <View style={{ marginBottom: 15, borderBottomWidth: 1, borderBottomColor: '#ddd', paddingBottom: 10 }}>
-          <Text style={{ fontSize: 18, fontWeight: '600', color: '#555' }}>Cédula</Text>
-          <Text style={{ fontSize: 16, color: '#111' }}>{perfil.cedula}</Text>
-        </View>
-
-        {/* Dirección */}
-        <View style={{ marginBottom: 15, borderBottomWidth: 1, borderBottomColor: '#ddd', paddingBottom: 10 }}>
-          <Text style={{ fontSize: 18, fontWeight: '600', color: '#555' }}>Dirección</Text>
-          <Text style={{ fontSize: 16, color: '#111' }}>{perfil.direccion}</Text>
-        </View>
-
-        {/* Teléfono */}
-        <View>
-          <Text style={{ fontSize: 18, fontWeight: '600', color: '#555' }}>Teléfono</Text>
-          <Text style={{ fontSize: 16, color: '#111' }}>{perfil.telefono}</Text>
-        </View>
-      </View>
-    </ScrollView>
+      }
+    />
   );
 };
+
+// Componente para campos individuales
+const Field = ({ label, value }) => (
+  <View style={{ marginBottom: 15, borderBottomWidth: 1, borderBottomColor: '#ddd', paddingBottom: 10 }}>
+    <Text style={{ fontSize: 18, fontWeight: '600', color: '#555' }}>{label}</Text>
+    <Text style={{ fontSize: 16, color: '#111' }}>{value}</Text>
+  </View>
+);
 
 export default RepresentantePerfil;
