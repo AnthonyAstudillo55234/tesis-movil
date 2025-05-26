@@ -1,13 +1,42 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../styles/PerfilRepre.js';
+import CurvedHeaderLayout from '../components/CurvedHeaderLayout';
 
 const CambiarPassword = () => {
   const [password, setPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [updating, setUpdating] = useState(false);
+  const [perfil, setPerfil] = useState(null);
+
+  useEffect(() => {
+    const fetchPerfil = async () => {
+      try {
+        const token = await AsyncStorage.getItem('token');
+        const res = await fetch('https://escuela-descubrir.vercel.app/api/perfil', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        setPerfil(data);
+      } catch (error) {
+        console.error('Error al obtener perfil:', error);
+      }
+    };
+
+    fetchPerfil();
+  }, []);
 
   const handleChangePassword = async () => {
     if (!password.trim() || !newPassword.trim() || !confirmPassword.trim()) {
@@ -30,15 +59,10 @@ const CambiarPassword = () => {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify({
-          password,
-          newPassword,
-          confirmPassword
-        }),
+        body: JSON.stringify({ password, newPassword, confirmPassword }),
       });
 
       const data = await res.json();
-      console.log('Respuesta:', data);
 
       if (res.ok) {
         Alert.alert('Éxito', data.message || 'Contraseña actualizada correctamente');
@@ -56,56 +80,71 @@ const CambiarPassword = () => {
     }
   };
 
+  if (!perfil) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
+
   return (
-    <ScrollView contentContainerStyle={styles.formContainer}>
-      <Text style={styles.formTitle}>Cambiar Contraseña</Text>
+    <CurvedHeaderLayout
+      userName={`${perfil.nombre} ${perfil.apellido}`}
+      avatarUrl="https://cdn-icons-png.flaticon.com/512/3884/3884879.png"
+      showBackButton={true}
+      showViewButton={false}
+      content={
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.formContainer}
+        >
+          <View>
+            <Text style={styles.formTitle}>Cambiar Contraseña</Text>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Contraseña Actual</Text>
-        <TextInput
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-          placeholder="Escribe tu contraseña actual"
-          placeholderTextColor="#aaa"
-          secureTextEntry
-        />
-      </View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Contraseña Actual</Text>
+              <TextInput
+                style={styles.input}
+                value={password}
+                onChangeText={setPassword}
+                placeholder="Escribe tu contraseña actual"
+                placeholderTextColor="#aaa"
+                secureTextEntry
+              />
+            </View>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Nueva Contraseña</Text>
-        <TextInput
-          style={styles.input}
-          value={newPassword}
-          onChangeText={setNewPassword}
-          placeholder="Escribe tu nueva contraseña"
-          placeholderTextColor="#aaa"
-          secureTextEntry
-        />
-      </View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Nueva Contraseña</Text>
+              <TextInput
+                style={styles.input}
+                value={newPassword}
+                onChangeText={setNewPassword}
+                placeholder="Escribe tu nueva contraseña"
+                placeholderTextColor="#aaa"
+                secureTextEntry
+              />
+            </View>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Confirmar Nueva Contraseña</Text>
-        <TextInput
-          style={styles.input}
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          placeholder="Confirma tu nueva contraseña"
-          placeholderTextColor="#aaa"
-          secureTextEntry
-        />
-      </View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Confirmar Nueva Contraseña</Text>
+              <TextInput
+                style={styles.input}
+                value={confirmPassword}
+                onChangeText={setConfirmPassword}
+                placeholder="Confirma tu nueva contraseña"
+                placeholderTextColor="#aaa"
+                secureTextEntry
+              />
+            </View>
 
-      <TouchableOpacity
-        style={[styles.button, updating && { opacity: 0.7 }]}
-        onPress={handleChangePassword}
-        disabled={updating}
-      >
-        <Text style={styles.buttonText}>
-          {updating ? 'Actualizando...' : 'Cambiar Contraseña'}
-        </Text>
-      </TouchableOpacity>
-    </ScrollView>
+            <TouchableOpacity
+              style={[styles.button, updating && { opacity: 0.7 }]}
+              onPress={handleChangePassword}
+              disabled={updating}
+            >
+              <Text style={styles.buttonText}>
+                {updating ? 'Actualizando...' : 'Cambiar Contraseña'}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      }
+    />
   );
 };
 

@@ -22,7 +22,7 @@ const RepresentanteStyles2 = StyleSheet.create({
     justifyContent: 'center',
   },
   header: {
-    backgroundColor: '#4A90E2',
+    backgroundColor: '#28a745',
   },
   headerText: {
     fontWeight: 'bold',

@@ -11,11 +11,11 @@ export default StyleSheet.create({
     fontSize: 26,
     fontWeight: 'bold',
     color: '#2c3e50',
-    marginBottom: 30,
+    marginBottom: 20,
     textAlign: 'center',
   },
   inputGroup: {
-    marginBottom: 20,
+    marginBottom: 10,
   },
   label: {
     fontSize: 16,

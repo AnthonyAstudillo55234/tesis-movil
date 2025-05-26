@@ -22,14 +22,17 @@ export default StyleSheet.create({
   tableContainer: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 5,
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginVertical: 20,
   },
   tableRow: {
     flexDirection: 'row',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    paddingVertical: 8,
+    paddingHorizontal: 4,
   },
   tableHeader: {
     backgroundColor: '#f2f2f2',

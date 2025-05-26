@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, ScrollView, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import styles from '../styles/PerfilRepre.js';
+import styles from '../styles/ActDatosStyles.js';
+import CurvedHeaderLayout from '../components/CurvedHeaderLayout';
 
 const ActualizarDatos = () => {
   const [nombre, setNombre] = useState('');
@@ -11,6 +22,7 @@ const ActualizarDatos = () => {
   const [direccion, setDireccion] = useState('');
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [perfil, setPerfil] = useState(null);
 
   useEffect(() => {
     const fetchPerfil = async () => {
@@ -26,6 +38,7 @@ const ActualizarDatos = () => {
         setEmail(data.email || '');
         setTelefono(data.telefono || '');
         setDireccion(data.direccion || '');
+        setPerfil(data);
       } catch (error) {
         console.error('Error al cargar perfil:', error);
         Alert.alert('Error', 'No se pudo cargar la información del perfil');
@@ -71,83 +84,96 @@ const ActualizarDatos = () => {
     }
   };
 
-  if (loading) {
+  if (loading || !perfil) {
     return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
   }
 
   return (
-    <ScrollView contentContainerStyle={styles.formContainer}>
-      <Text style={styles.formTitle}>Actualizar Datos</Text>
+    <CurvedHeaderLayout
+      userName={`${perfil.nombre} ${perfil.apellido}`}
+      avatarUrl="https://cdn-icons-png.flaticon.com/512/3884/3884879.png"
+      showBackButton={true}
+      showViewButton={false}
+      content={
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.formContainer}
+        >
+          <ScrollView>
+            <Text style={styles.formTitle}>Actualizar Datos</Text>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Nuevo Nombre</Text>
-        <TextInput
-          style={styles.input}
-          value={nombre}
-          onChangeText={setNombre}
-          placeholder="Escribe tu nuevo nombre"
-          placeholderTextColor="#aaa"
-        />
-      </View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Nuevo Nombre</Text>
+              <TextInput
+                style={styles.input}
+                value={nombre}
+                onChangeText={setNombre}
+                placeholder="Escribe tu nuevo nombre"
+                placeholderTextColor="#aaa"
+              />
+            </View>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Nuevo Apellido</Text>
-        <TextInput
-          style={styles.input}
-          value={apellido}
-          onChangeText={setApellido}
-          placeholder="Escribe tu nuevo apellido"
-          placeholderTextColor="#aaa"
-        />
-      </View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Nuevo Apellido</Text>
+              <TextInput
+                style={styles.input}
+                value={apellido}
+                onChangeText={setApellido}
+                placeholder="Escribe tu nuevo apellido"
+                placeholderTextColor="#aaa"
+              />
+            </View>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Nuevo Email</Text>
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          placeholder="Escribe tu nuevo email"
-          placeholderTextColor="#aaa"
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-      </View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Nuevo Email</Text>
+              <TextInput
+                style={styles.input}
+                value={email}
+                onChangeText={setEmail}
+                placeholder="Escribe tu nuevo email"
+                placeholderTextColor="#aaa"
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </View>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Nuevo Teléfono</Text>
-        <TextInput
-          style={styles.input}
-          value={telefono}
-          onChangeText={setTelefono}
-          placeholder="Escribe tu nuevo teléfono"
-          placeholderTextColor="#aaa"
-          keyboardType="phone-pad"
-        />
-      </View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Nuevo Teléfono</Text>
+              <TextInput
+                style={styles.input}
+                value={telefono}
+                onChangeText={setTelefono}
+                placeholder="Escribe tu nuevo teléfono"
+                placeholderTextColor="#aaa"
+                keyboardType="phone-pad"
+              />
+            </View>
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Nueva Dirección</Text>
-        <TextInput
-          style={styles.input}
-          value={direccion}
-          onChangeText={setDireccion}
-          placeholder="Escribe tu nueva dirección"
-          placeholderTextColor="#aaa"
-          multiline
-        />
-      </View>
+            <View style={styles.inputGroup}>
+              <Text style={styles.label}>Nueva Dirección</Text>
+              <TextInput
+                style={styles.input}
+                value={direccion}
+                onChangeText={setDireccion}
+                placeholder="Escribe tu nueva dirección"
+                placeholderTextColor="#aaa"
+                multiline
+              />
+            </View>
 
-      <TouchableOpacity
-        style={[styles.button, updating && { opacity: 0.7 }]}
-        onPress={handleActualizar}
-        disabled={updating}
-      >
-        <Text style={styles.buttonText}>
-          {updating ? 'Actualizando...' : 'Actualizar'}
-        </Text>
-      </TouchableOpacity>
-    </ScrollView>
+            <TouchableOpacity
+              style={[styles.button, updating && { opacity: 0.7 }]}
+              onPress={handleActualizar}
+              disabled={updating}
+            >
+              <Text style={styles.buttonText}>
+                {updating ? 'Actualizando...' : 'Actualizar'}
+              </Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      }
+    />
   );
 };
 

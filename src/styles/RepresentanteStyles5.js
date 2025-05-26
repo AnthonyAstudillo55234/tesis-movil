@@ -10,7 +10,8 @@ export default {
     label: {
       marginTop: 12,
       marginBottom: 4,
-      fontSize: 25,
+      fontSize: 15,
+      fontWeight: 'bold',
     },
     picker: {
       height: 50,

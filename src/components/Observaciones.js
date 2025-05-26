@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform
+} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import styles from '../styles/RepresentanteStyles4.js';
+import CurvedHeaderLayout from '../components/CurvedHeaderLayout';
+import styles from '../styles/RepresentanteStyles3.js';
 
 const ObservacionesEstudiante = () => {
   const [estudiantes, setEstudiantes] = useState([]);
@@ -12,11 +20,19 @@ const ObservacionesEstudiante = () => {
   const [loadingObservaciones, setLoadingObservaciones] = useState(false);
   const [open, setOpen] = useState(false);
   const [items, setItems] = useState([]);
+  const [perfil, setPerfil] = useState(null);
 
   useEffect(() => {
     const fetchEstudiantes = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
+
+        const resPerfil = await fetch('https://escuela-descubrir.vercel.app/api/perfil', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const dataPerfil = await resPerfil.json();
+        setPerfil(dataPerfil);
+
         const res = await fetch('https://escuela-descubrir.vercel.app/api/estudiantes-registrados', {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -46,9 +62,12 @@ const ObservacionesEstudiante = () => {
       setLoadingObservaciones(true);
       try {
         const token = await AsyncStorage.getItem('token');
-        const res = await fetch(`https://escuela-descubrir.vercel.app/api/ver-observaciones-estudiante/${selectedEstudiante}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(
+          `https://escuela-descubrir.vercel.app/api/ver-observaciones-estudiante/${selectedEstudiante}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
         const data = await res.json();
         setObservaciones(data.observaciones || []);
       } catch (error) {
@@ -62,61 +81,71 @@ const ObservacionesEstudiante = () => {
     fetchObservaciones();
   }, [selectedEstudiante]);
 
+  if (!perfil) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Consultar Observaciones</Text>
+    <CurvedHeaderLayout
+      userName={`${perfil.nombre} ${perfil.apellido}`}
+      avatarUrl="https://cdn-icons-png.flaticon.com/512/3884/3884879.png"
+      showBackButton={true}
+      showViewButton={false}
+      content={
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.container}
+        >
+          <Text style={styles.title}>Consultar Observaciones</Text>
 
-      {loadingEstudiantes ? (
-        <ActivityIndicator size="large" />
-      ) : (
-        <DropDownPicker
-          open={open}
-          value={selectedEstudiante}
-          items={items}
-          setOpen={setOpen}
-          setValue={setSelectedEstudiante}
-          setItems={setItems}
-          placeholder="Selecciona un Estudiante"
-          style={styles.dropdown}
-          dropDownContainerStyle={styles.dropdownContainer}
-        />
-      )}
+          {loadingEstudiantes ? (
+            <ActivityIndicator size="large" />
+          ) : (
+            <DropDownPicker
+              open={open}
+              value={selectedEstudiante}
+              items={items}
+              setOpen={setOpen}
+              setValue={setSelectedEstudiante}
+              setItems={setItems}
+              placeholder="Selecciona un Estudiante"
+              style={styles.dropdown}
+              dropDownContainerStyle={styles.dropdownContainer}
+            />
+          )}
 
-      {selectedEstudiante && (
-        loadingObservaciones ? (
-          <ActivityIndicator size="large" />
-        ) : (
-          <ScrollView>
-            <View style={styles.tableContainer}>
-              <View style={[styles.tableRow, styles.tableHeader]}>
-                <Text style={[styles.tableCell, { flex: 2, fontWeight: 'bold' }]}>Observación</Text>
-                <Text style={[styles.tableCell, { flex: 2, fontWeight: 'bold' }]}>Profesor</Text>
-                <Text style={[styles.tableCell, { flex: 1, fontWeight: 'bold' }]}>Fecha</Text>
-              </View>
-
-              {observaciones.length === 0 ? (
-                <View style={styles.tableRow}>
-                  <Text style={styles.noDataText}>No hay observaciones registradas.</Text>
-                </View>
-              ) : (
-                observaciones.map((obs, idx) => (
-                  <View
-                    key={idx}
-                    style={styles.tableRow}
-                  >
-                    <Text style={[styles.tableCell, { flex: 2 }]}>{obs.observacion}</Text>
-                    <Text style={[styles.tableCell, { flex: 2 }]}>
-                      {obs.profesor?.nombre} {obs.profesor?.apellido}
-                    </Text>
-                    <Text style={[styles.tableCell, { flex: 1 }]}>{obs.fecha}</Text>
+          {selectedEstudiante && (
+            loadingObservaciones ? (
+              <ActivityIndicator size="large" />
+            ) : (
+              <ScrollView>
+                <View style={styles.tableContainer}>
+                  <View style={[styles.tableRow, styles.tableHeader]}>
+                    <Text style={[styles.tableCell, { flex: 2, fontWeight: 'bold' }]}>Observación</Text>
+                    <Text style={[styles.tableCell, { flex: 2, fontWeight: 'bold' }]}>Profesor</Text>
+                    <Text style={[styles.tableCell, { flex: 1, fontWeight: 'bold' }]}>Fecha</Text>
                   </View>
-                ))
-              )}
-            </View>
-          </ScrollView>
-        )
-      )}
-    </View>
+
+                  {observaciones.length === 0 ? (
+                    <View style={styles.tableRow}>
+                      <Text style={styles.noDataText}>No hay observaciones registradas.</Text>
+                    </View>
+                  ) : (
+                    observaciones.map((obs, idx) => (
+                      <View key={idx} style={styles.tableRow}>
+                        <Text style={[styles.tableCell, { flex: 2 }]}>{obs.observacion}</Text>
+                        <Text style={[styles.tableCell, { flex: 2 }]}>
+                          {obs.profesor?.nombre} {obs.profesor?.apellido}
+                        </Text>
+                        <Text style={[styles.tableCell, { flex: 1 }]}>{obs.fecha}</Text>
+                      </View>
+                    ))
+                  )}
+                </View>
+              </ScrollView>
+            )
+          )}
+        </KeyboardAvoidingView>
+      }
+    />
   );
 };
 
