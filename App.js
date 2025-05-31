@@ -2,18 +2,26 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import LoginScreen from './src/screens/Login.js';
-import AdminScreen from './src/screens/Admin.js';
+// Pantallas comunes
+import LoginScreen from './src/screens/Login';
+import AdminScreen from './src/screens/Admin';
 
-import RepresentanteHome from './src/screens/Representante.js';
-import EstudiantesAsignados from './src/components/EstudiantesAsignados.js';
-import Calificaciones from './src/components/Calificaciones.js';
-import Asistencias from './src/components/Asistencias.js';
-import Observaciones from './src/components/Observaciones.js';
+// Representante
+import RepresentanteHome from './src/screens/Representante';
+import EstudiantesAsignados from './src/components/EstudiantesAsignados';
+import Calificaciones from './src/components/Calificaciones';
+import Asistencias from './src/components/Asistencias';
+import Observaciones from './src/components/Observaciones';
+import RepresentantePerfil from './src/components/RepresentantePerfil';
+import ActualizarDatos from './src/components/ActualizarDatos';
+import CambiarPassword from './src/components/CambiarPassword';
 
-import RepresentantePerfil from './src/components/RepresentantePerfil.js';
-import ActualizarDatos from './src/components/ActualizarDatos.js';
-import CambiarPassword from './src/components/CambiarPassword.js';
+// Profesor
+import ProfesorHome from './src/screens/Profesor';
+import ProfesorPerfil from './src/components/ProfesorPerfil';
+import RegistrarNotas from './src/components/RegistrarNotas';
+import ActualizarNotas from './src/components/ActualizarNotas';
+import RegistrarObservaciones from './src/components/RegistrarObservaciones';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,12 +29,17 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-        <Stack.Screen 
-          name="Login" 
-          component={LoginScreen} 
-          options={{ headerShown: false }} 
+        {/* Pantalla de login */}
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
         />
+
+        {/* Admin */}
         <Stack.Screen name="Admin" component={AdminScreen} />
+
+        {/* Representante */}
         <Stack.Screen name="Representante" component={RepresentanteHome} />
         <Stack.Screen name="Estudiantes Asignados" component={EstudiantesAsignados} />
         <Stack.Screen name="Calificaciones" component={Calificaciones} />
@@ -35,6 +48,13 @@ const App = () => {
         <Stack.Screen name="Perfil" component={RepresentantePerfil} />
         <Stack.Screen name="Actualizar Datos" component={ActualizarDatos} />
         <Stack.Screen name="Cambiar Contrasena" component={CambiarPassword} />
+
+        {/* Profesor */}
+        <Stack.Screen name="Profesor" component={ProfesorHome} />
+        <Stack.Screen name="Profesor Perfil" component={ProfesorPerfil} />
+        <Stack.Screen name="Registrar Notas" component={RegistrarNotas} />
+        <Stack.Screen name="Actualizar Notas" component={ActualizarNotas} />
+        <Stack.Screen name="Registrar Observaciones" component={RegistrarObservaciones} />
       </Stack.Navigator>
     </NavigationContainer>
   );

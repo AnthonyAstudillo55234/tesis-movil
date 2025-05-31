@@ -74,10 +74,12 @@ const LoginScreen = () => {
         if (data.rol === 'administrador') {
           navigation.navigate('Admin');
         } else if (data.rol === 'representante') {
-          navigation.navigate('Representante'); // Asegúrate de tener esta pantalla creada
+          navigation.navigate('Representante');
+        } else if (data.rol === 'profesor') {
+          navigation.navigate('Profesor');
         } else {
           Alert.alert('Info', 'Rol no soportado');
-        }
+        }        
       } else {
         Alert.alert('Error', data.message || 'Credenciales inválidas');
       }

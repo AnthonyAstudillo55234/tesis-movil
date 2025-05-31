@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../styles/ActDatosStyles.js';
-import CurvedHeaderLayout from '../components/CurvedHeaderLayout';
+import CurvedHeaderLayout from './CurvedHeaderLayout.js';
 
 const ActualizarDatos = () => {
   const [nombre, setNombre] = useState('');
@@ -88,10 +88,14 @@ const ActualizarDatos = () => {
     return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
   }
 
+  // Selección de avatar según el rol
+  const avatarUrl = perfil.rol === 'profesor'
+    ? 'https://cdn-icons-png.flaticon.com/512/3884/3884879.png'
+    : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
   return (
     <CurvedHeaderLayout
       userName={`${perfil.nombre} ${perfil.apellido}`}
-      avatarUrl="https://cdn-icons-png.flaticon.com/512/3884/3884879.png"
+      avatarUrl={avatarUrl}
       showBackButton={true}
       showViewButton={false}
       content={
