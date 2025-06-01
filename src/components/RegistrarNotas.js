@@ -13,6 +13,7 @@ import {
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import CurvedHeaderLayout from '../components/CurvedHeaderLayout';
 import styles from '../styles/RegistrarNotasStyles.js';
 
 const tiposNotas = [

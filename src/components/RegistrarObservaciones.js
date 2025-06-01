@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import styles from '../styles/ObservacionesStyles.js'; // Asume que tienes estilos personalizados
+import styles from '../styles/ObservacionesStyles.js';
 
 const ObservacionesScreen = () => {
   const [cursos, setCursos] = useState([]);

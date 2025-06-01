@@ -4,8 +4,8 @@ import { Button } from 'react-native-web';
 export default StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: '#f0f4f8',
+    padding: 20,
+    backgroundColor: '#fff',
   },
   title: {
     fontSize: 24,
