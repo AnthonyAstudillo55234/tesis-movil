@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Modal, TouchableOpacity, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker';
 import CurvedHeaderLayout from '../components/CurvedHeaderLayout';
@@ -21,19 +21,20 @@ const Calificaciones = () => {
 
   const [perfil, setPerfil] = useState(null);
 
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = await AsyncStorage.getItem('token');
 
-        // Perfil del representante
         const resPerfil = await fetch('https://escuela-descubrir.vercel.app/api/perfil', {
           headers: { Authorization: `Bearer ${token}` },
         });
         const dataPerfil = await resPerfil.json();
         setPerfil(dataPerfil);
 
-        // Estudiantes
         const resEstudiantes = await fetch('https://escuela-descubrir.vercel.app/api/estudiantes-registrados', {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -147,6 +148,7 @@ const Calificaciones = () => {
                     <Text style={[styles.tableCell, styles.headerCell]}>Tipo</Text>
                     <Text style={[styles.tableCell, styles.headerCell]}>Nota</Text>
                     <Text style={[styles.tableCell, styles.headerCell]}>Fecha</Text>
+                    <Text style={[styles.tableCell, styles.headerCell]}>Imagen</Text>
                   </View>
                   {notas.length === 0 ? (
                     <View style={styles.tableRow}>
@@ -159,10 +161,45 @@ const Calificaciones = () => {
                         <Text style={styles.tableCell}>{n.tipo}</Text>
                         <Text style={styles.tableCell}>{n.nota}</Text>
                         <Text style={styles.tableCell}>{n.fecha}</Text>
+                        <TouchableOpacity
+                          style={[styles.tableCell, { color: 'blue' }]}
+                          onPress={() => {
+                            setSelectedImage(n.evidenciaUrl);
+                            setModalVisible(true);
+                          }}
+                        >
+                          <Text style={{ color: 'blue' }}>Ver</Text>
+                        </TouchableOpacity>
                       </View>
                     ))
                   )}
                 </View>
+
+                {/* Modal para mostrar la imagen */}
+                <Modal
+                  visible={modalVisible}
+                  transparent={true}
+                  animationType="slide"
+                  onRequestClose={() => setModalVisible(false)}
+                >
+                  <View style={{
+                    flex: 1,
+                    backgroundColor: 'rgba(0,0,0,0.7)',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}>
+                    <Image
+                      source={{ uri: selectedImage }}
+                      style={{ width: '90%', height: 400, resizeMode: 'contain' }}
+                    />
+                    <TouchableOpacity
+                      onPress={() => setModalVisible(false)}
+                      style={{ marginTop: 20, padding: 10, backgroundColor: 'white', borderRadius: 10 }}
+                    >
+                      <Text>Cerrar</Text>
+                    </TouchableOpacity>
+                  </View>
+                </Modal>
               </ScrollView>
             )
           )}

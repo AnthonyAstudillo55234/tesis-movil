@@ -94,4 +94,16 @@ export default StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
+  registerButton: {
+    backgroundColor: '#3b82f6',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  registerButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
 });
