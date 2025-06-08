@@ -125,11 +125,15 @@ const ActualizarNotaScreen = () => {
   }, [curso, materia, tipo, subTipo]);
 
   const handleChangeNota = (id, value) => {
-    if (/^(10|[1-9](\.\d{0,2})?)?$/.test(value)) {
-      setNotas(prev => ({ ...prev, [id]: value }));
+    // Reemplaza coma por punto
+    const nuevoValor = value.replace(',', '.');
+  
+    // Permitir solo números del 1 al 10, con hasta 2 decimales
+    if (/^(10(\.0{0,2})?|[1-9](\.\d{0,2})?)?$/.test(nuevoValor)) {
+      setNotas(prev => ({ ...prev, [id]: nuevoValor }));
     }
   };
-
+  
   const actualizarNotas = async () => {
     if (!materia || !tipo || !subTipo) {
       Alert.alert('Error', 'Debes seleccionar materia, tipo y sub-tipo.');
@@ -236,6 +240,8 @@ const ActualizarNotaScreen = () => {
                 <Text style={styles.name}>{item.nombre} {item.apellido}</Text>
                 <TextInput
                   style={styles.input}
+                  placeholder="Nota"
+                  maxLength={5}
                   keyboardType="decimal-pad"
                   value={notas[item._id]}
                   onChangeText={value => handleChangeNota(item._id, value)}

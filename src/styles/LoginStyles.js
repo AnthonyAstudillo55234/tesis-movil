@@ -10,7 +10,6 @@ export const styles = StyleSheet.create({
     fontSize: 35,
     fontWeight: 'bold',
     marginBottom: 20,
-    backgroundColor: '#fff',
     textAlign: 'center',
     padding: 5,
     marginLeft: 75,

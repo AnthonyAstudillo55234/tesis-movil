@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Alert, TouchableOpacity, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  Alert,
+  TouchableOpacity,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Picker } from '@react-native-picker/picker';
+import DropDownPicker from 'react-native-dropdown-picker';
 import Checkbox from 'expo-checkbox';
+
 import { styles } from '../styles/AdminStyles';
 
 const AdminAttendanceScreen = () => {
   const [cursos, setCursos] = useState([]);
   const [estudiantes, setEstudiantes] = useState([]);
-  const [selectedCurso, setSelectedCurso] = useState('');
+  const [selectedCurso, setSelectedCurso] = useState(null);
+  const [openCursos, setOpenCursos] = useState(false);
+  const [itemsCursos, setItemsCursos] = useState([]);
   const [asistencias, setAsistencias] = useState({});
-  
+
   useEffect(() => {
     const fetchCursos = async () => {
       try {
@@ -20,6 +31,12 @@ const AdminAttendanceScreen = () => {
         });
         const data = await response.json();
         setCursos(data);
+
+        const dropdownItems = data.map(curso => ({
+          label: curso.nombre,
+          value: curso._id,
+        }));
+        setItemsCursos(dropdownItems);
       } catch (error) {
         console.error('Error al cargar cursos:', error);
       }
@@ -27,32 +44,34 @@ const AdminAttendanceScreen = () => {
     fetchCursos();
   }, []);
 
-  const handleCursoChange = async (cursoId) => {
-    setSelectedCurso(cursoId);
+  useEffect(() => {
+    if (selectedCurso) {
+      fetchEstudiantes(selectedCurso);
+    } else {
+      setEstudiantes([]);
+      setAsistencias({});
+    }
+  }, [selectedCurso]);
+
+  const fetchEstudiantes = async (cursoId) => {
     setEstudiantes([]);
     setAsistencias({});
-
-    if (!cursoId) return;
-
     try {
       const token = await AsyncStorage.getItem('token');
-      const response = await fetch(`https://escuela-descubrir.vercel.app/api/cursos/${cursoId}/estudiantes`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      const response = await fetch(
+        `https://escuela-descubrir.vercel.app/api/cursos/${cursoId}/estudiantes`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       const data = await response.json();
 
       if (Array.isArray(data)) {
         setEstudiantes(data);
-
-        // Inicializar asistencias como false (ausente por defecto)
         const asistenciasIniciales = {};
         data.forEach(est => {
           asistenciasIniciales[est._id] = false;
         });
         setAsistencias(asistenciasIniciales);
       } else {
-        console.warn('Respuesta inesperada de estudiantes:', data);
         Alert.alert('Error', data.error || 'No se pudieron cargar los estudiantes');
       }
     } catch (error) {
@@ -64,7 +83,7 @@ const AdminAttendanceScreen = () => {
   const toggleAsistencia = (estudianteId) => {
     setAsistencias(prev => ({
       ...prev,
-      [estudianteId]: !prev[estudianteId], // true si presente, false si ausente
+      [estudianteId]: !prev[estudianteId],
     }));
   };
 
@@ -76,7 +95,6 @@ const AdminAttendanceScreen = () => {
 
     try {
       const token = await AsyncStorage.getItem('token');
-      console.log('Asistencias a enviar:', asistencias);
       const response = await fetch('https://escuela-descubrir.vercel.app/api/registro-asistencia', {
         method: 'POST',
         headers: {
@@ -85,7 +103,7 @@ const AdminAttendanceScreen = () => {
         },
         body: JSON.stringify({
           curso: selectedCurso,
-          asistencias, // todos los valores serán true (presente) o false (ausente)
+          asistencias,
         }),
       });
 
@@ -93,7 +111,7 @@ const AdminAttendanceScreen = () => {
       if (response.ok) {
         Alert.alert('Éxito', data.message || 'Asistencias registradas');
         setAsistencias({});
-        setSelectedCurso('');
+        setSelectedCurso(null);
         setEstudiantes([]);
       } else {
         Alert.alert('Error', data.message || 'Asistencia ya registrada');
@@ -105,39 +123,102 @@ const AdminAttendanceScreen = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Registro de Asistencia</Text>
+    <KeyboardAvoidingView
+      style={{ flex: 1, padding: 16 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
+    >
+      <View style={{ flex: 1 }}>
+        <Text style={styles.title}>Registro de Asistencia</Text>
 
-      <Picker
-        selectedValue={selectedCurso}
-        onValueChange={(itemValue) => handleCursoChange(itemValue)}
-        style={styles.input}
-      >
-        <Picker.Item label="Selecciona un curso" value="" />
-        {cursos.map((curso) => (
-          <Picker.Item key={curso._id} label={curso.nombre} value={curso._id} />
-        ))}
-      </Picker>
+        <DropDownPicker
+          open={openCursos}
+          value={selectedCurso}
+          items={itemsCursos}
+          setOpen={setOpenCursos}
+          setValue={setSelectedCurso}
+          setItems={setItemsCursos}
+          placeholder="Selecciona un curso"
+          style={{
+            borderColor: '#0a0a0a',
+            borderRadius: 8,
+            marginVertical: 10,
+            paddingHorizontal: 10,
+          }}
+          dropDownContainerStyle={{
+            borderColor: '#007AFF',
+            borderRadius: 8,
+          }}
+        />
 
-      {estudiantes.map((estudiante) => (
-        <View key={estudiante._id} style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 8 }}>
-          <Text style={{ flex: 1 }}>
-            {estudiante.nombre} {estudiante.apellido}
-          </Text>
-          <Checkbox
-            value={asistencias[estudiante._id]}
-            onValueChange={() => toggleAsistencia(estudiante._id)}
-          />
-          <Text style={{ marginLeft: 10 }}>
-            {asistencias[estudiante._id] ? 'Presente' : 'Ausente'}
-          </Text>
-        </View>
-      ))}
+        {/* ScrollView solo para la tabla, con nestedScrollEnabled */}
+        <ScrollView
+          style={{ flex: 1, marginTop: 20 }}
+          nestedScrollEnabled={true}
+          keyboardShouldPersistTaps="handled"
+        >
+          {estudiantes.length > 0 && (
+            <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 8 }}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  backgroundColor: '#28a745',
+                  paddingVertical: 10,
+                  paddingHorizontal: 10,
+                  borderTopLeftRadius: 8,
+                  borderTopRightRadius: 8,
+                }}
+              >
+                <Text style={{ flex: 2, color: 'white', fontWeight: 'bold' }}>Estudiante</Text>
+                <Text style={{ flex: 1, color: 'white', fontWeight: 'bold', textAlign: 'center' }}>
+                  Asistencia
+                </Text>
+              </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-        <Text style={styles.buttonText}>Registrar Asistencias</Text>
-      </TouchableOpacity>
-    </ScrollView>
+              {estudiantes.map((estudiante) => (
+                <View
+                  key={estudiante._id}
+                  style={{
+                    flexDirection: 'row',
+                    paddingVertical: 12,
+                    paddingHorizontal: 10,
+                    borderBottomWidth: 1,
+                    borderBottomColor: '#ddd',
+                    backgroundColor: asistencias[estudiante._id] ? '#e6f0ff' : 'white',
+                    alignItems: 'center',
+                  }}
+                >
+                  <Text style={{ flex: 2 }}>
+                    {estudiante.nombre} {estudiante.apellido}
+                  </Text>
+                  <View
+                    style={{
+                      flex: 1,
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Checkbox
+                      value={asistencias[estudiante._id]}
+                      onValueChange={() => toggleAsistencia(estudiante._id)}
+                      color={asistencias[estudiante._id] ? '#007AFF' : undefined}
+                    />
+                    <Text style={{ marginLeft: 8 }}>
+                      {asistencias[estudiante._id] ? 'Presente' : 'Ausente'}
+                    </Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
+        </ScrollView>
+
+        <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Registrar Asistencias</Text>
+        </TouchableOpacity>
+      </View>
+    </KeyboardAvoidingView>
   );
 };
 

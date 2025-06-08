@@ -13,7 +13,6 @@ import {
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import CurvedHeaderLayout from '../components/CurvedHeaderLayout';
 import styles from '../styles/RegistrarNotasStyles.js';
 
 const tiposNotas = [
@@ -208,12 +207,16 @@ const RegistrarNotas = () => {
     const headers = await getHeaders();
     const notasPayload = {};
     estudiantes.forEach((est) => {
-      const notaValue = notas[est._id];
-      if (notaValue !== undefined && notaValue !== '') {
-        notasPayload[est._id] = Number(notaValue);
+      let notaStr = notas[est._id];
+      if (notaStr !== undefined && notaStr !== '') {
+        notaStr = notaStr.replace(',', '.');
+        const notaNum = parseFloat(notaStr);
+        if (!isNaN(notaNum) && notaNum >= 1 && notaNum <= 10) {
+          notasPayload[est._id] = notaNum;
+        }
       }
     });
-  
+    
     console.log('Datos a enviar:', {
       tipo: tipoNota.toLowerCase(),
       notas: notasPayload,
@@ -345,18 +348,20 @@ const RegistrarNotas = () => {
                 <TextInput
                   style={styles.inputNota}
                   keyboardType="numeric"
-                  maxLength={2}
+                  maxLength={5}
                   placeholder="Nota"
                   value={notas[item._id] ? String(notas[item._id]) : ''}
                   onChangeText={(text) => {
-                    const val = text.replace(/[^0-9]/g, '');
-                    const num = parseInt(val, 10);
-                    if (!isNaN(num) && num >= 1 && num <= 10) {
-                      setNotas((prev) => ({ ...prev, [item._id]: num }));
-                    } else {
-                      setNotas((prev) => ({ ...prev, [item._id]: '' }));
+                    let valor = text.replace(',', '.'); // Acepta coma como separador decimal
+                    const regex = /^\d{0,2}(\.\d{0,2})?$/;
+                  
+                    if (regex.test(valor)) {
+                      const numero = parseFloat(valor);
+                      if (valor === '' || (numero >= 1 && numero <= 10)) {
+                        setNotas((prev) => ({ ...prev, [item._id]: valor }));
+                      }
                     }
-                  }}
+                  }}                                                     
                 />
               </View>
             )}

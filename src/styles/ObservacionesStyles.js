@@ -4,13 +4,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#f5f7fa',
+    backgroundColor: '#fff',
   },
   title: {
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 16,
-    color: '#333',
+    color: '#28a745',
     textAlign: 'center',
   },
   dropdown: {
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#f5f7fa',
     padding: 12,
     marginVertical: 6,
     borderRadius: 8,
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   button: {
-    backgroundColor: '#445069',
+    backgroundColor: '#28a745',
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 6,
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   modalButtonSave: {
-    backgroundColor: '#445069',
+    backgroundColor: '#28a745',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,

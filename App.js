@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // Pantallas comunes
 import LoginScreen from './src/screens/Login';
 import AdminScreen from './src/screens/Admin';
+import RecuperarPasswordScreen from './src/screens/RecuperarPassword';
 
 // Representante
 import RepresentanteHome from './src/screens/Representante';
@@ -15,6 +16,7 @@ import Observaciones from './src/components/Observaciones';
 import RepresentantePerfil from './src/components/RepresentantePerfil';
 import ActualizarDatos from './src/components/ActualizarDatos';
 import CambiarPassword from './src/components/CambiarPassword';
+import Notificaciones from './src/components/Notificaciones';
 
 // Profesor
 import ProfesorHome from './src/screens/Profesor';
@@ -35,6 +37,12 @@ const App = () => {
           component={LoginScreen}
           options={{ headerShown: false }}
         />
+        {/* Recuperar contraseña */}
+        <Stack.Screen
+          name="RecuperarPassword"
+          component={RecuperarPasswordScreen}
+          options={{ title: 'Recuperar Contraseña' }}
+        />
 
         {/* Admin */}
         <Stack.Screen name="Admin" component={AdminScreen} />
@@ -48,6 +56,7 @@ const App = () => {
         <Stack.Screen name="Perfil" component={RepresentantePerfil} />
         <Stack.Screen name="Actualizar Datos" component={ActualizarDatos} />
         <Stack.Screen name="Cambiar Contrasena" component={CambiarPassword} />
+        <Stack.Screen name="Notificaciones" component={Notificaciones} />
 
         {/* Profesor */}
         <Stack.Screen name="Profesor" component={ProfesorHome} />

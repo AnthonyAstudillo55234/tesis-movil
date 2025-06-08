@@ -4,13 +4,13 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f2f7fc',
+    backgroundColor: '#fff',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 15,
-    color: '#1a4c8b',
+    color: '#28a745',
     textAlign: 'center',
   },
   dropdown: {
@@ -40,14 +40,14 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
   },
   button: {
-    backgroundColor: '#1a4c8b',
+    backgroundColor: '#28a745',
     padding: 15,
     borderRadius: 10,
     marginTop: 20,
     alignItems: 'center',
   },
   buttonText: {
-    color: '#fff',
+    color: '#fafafa',
     fontSize: 16,
     fontWeight: 'bold',
   },

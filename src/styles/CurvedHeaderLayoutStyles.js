@@ -60,4 +60,22 @@ export default StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
+  badgeContainer: {
+    position: 'absolute',
+    top: -6,
+    right: -10,
+    backgroundColor: 'red',
+    borderRadius: 10,
+    minWidth: 18,
+    height: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 4,
+    zIndex: 10,
+  },
+  badgeText: {
+    color: 'white',
+    fontSize: 11,
+    fontWeight: 'bold',
+  },
 });

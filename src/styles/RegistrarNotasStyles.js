@@ -10,7 +10,7 @@ export default StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#1e3a8a',
+    color: '#28a745',
     marginBottom: 16,
     textAlign: 'center',
   },
@@ -18,7 +18,7 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     marginVertical: 10,
-    color: '#1e3a8a',
+    color: '#28a745',
   },
   dropdown: {
     marginBottom: 12,
@@ -34,7 +34,7 @@ export default StyleSheet.create({
     zIndex: 999,
   },
   imageButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#28a745',
     paddingVertical: 10,
     borderRadius: 8,
     alignItems: 'center',
@@ -54,7 +54,7 @@ export default StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#f9f9f9',
     borderRadius: 8,
     padding: 10,
     marginBottom: 10,
@@ -76,7 +76,7 @@ export default StyleSheet.create({
     backgroundColor: '#fefefe',
   },
   submitButton: {
-    backgroundColor: '#10b981',
+    backgroundColor: '#28a745',
     paddingVertical: 12,
     borderRadius: 8,
     marginTop: 20,
@@ -88,14 +88,14 @@ export default StyleSheet.create({
     fontWeight: 'bold',
   },
   button: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#28a745',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 20,
   },
   registerButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#28a745',
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',

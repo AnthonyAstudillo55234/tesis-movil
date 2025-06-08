@@ -13,18 +13,14 @@ const RepresentanteHome = () => {
     { icon: 'alert-circle-outline', label: 'Observaciones', onPress: () => navigation.navigate('Observaciones') },
     { icon: 'create-outline', label: 'Actualizar Datos', onPress: () => navigation.navigate('Actualizar Datos') },
     { icon: 'key-outline', label: 'Cambiar Contraseña', onPress: () => navigation.navigate('Cambiar Contrasena') },
+    { icon: 'notifications-outline', label: 'Notificaciones', onPress: () => navigation.navigate('Notificaciones') }, // Nueva pantalla
   ];
 
   return (
     <CurvedHeaderLayout
       userName="Representante"
       avatarUrl="https://cdn-icons-png.flaticon.com/512/3884/3884879.png"
-      menuItems={menuItems.map(item => ({
-        icon: item.icon,
-        label: item.label,
-        onPress: item.onPress
-      }))}
-      onViewPress={() => {}}
+      menuItems={menuItems}
     />
   );
 };
