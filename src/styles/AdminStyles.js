@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#28a745',  // azul corporativo
+    color: '#28a745',  
     marginBottom: 16,
     textAlign: 'center',
   },
@@ -33,7 +33,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 24,
     alignItems: 'center',
     marginVertical: 10,
-    marginBlockEnd: 90,
+    marginBlockEnd: 30,
     shadowColor: '#28a745',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
@@ -52,6 +52,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderTopLeftRadius: 8,
     borderTopRightRadius: 8,
+    marginTop: 30,
   },
   headerText: {
     flex: 2,

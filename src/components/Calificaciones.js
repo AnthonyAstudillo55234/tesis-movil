@@ -141,6 +141,7 @@ const Calificaciones = () => {
             <ActivityIndicator size="large" />
           ) : (
             estudianteSeleccionado && materiaSeleccionada && (
+              <View style={{ maxHeight: 400, overflow: 'scroll' }}>
               <ScrollView>
                 <View style={styles.tableContainer}>
                   <View style={[styles.tableRow, styles.tableHeader]}>
@@ -201,6 +202,7 @@ const Calificaciones = () => {
                   </View>
                 </Modal>
               </ScrollView>
+              </View>
             )
           )}
         </KeyboardAvoidingView>

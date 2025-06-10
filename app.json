@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "proyecto-tesis-app",
-    "slug": "proyecto-tesis-app",
+    "name": "Descubrir-app",
+    "slug": "descubrir-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/app_icon.png",
@@ -25,7 +25,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "dd09dde9-7c1e-4cf2-a6c4-e864d918b173"
+        "projectId": "a8176a78-8fda-4cb7-b0bb-776d6e5ef3eb"
       }
     }
   }

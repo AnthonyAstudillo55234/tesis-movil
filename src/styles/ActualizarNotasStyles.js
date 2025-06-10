@@ -45,6 +45,7 @@ export default StyleSheet.create({
     borderRadius: 10,
     marginTop: 20,
     alignItems: 'center',
+    marginBlockEnd: 90,
   },
   buttonText: {
     color: '#fafafa',

@@ -1,5 +1,7 @@
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
+import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; // Asegúrate de tener esto en tu proyecto
 import CurvedHeaderLayout from '../components/CurvedHeaderLayout';
 
 const RepresentanteHome = () => {
@@ -13,14 +15,37 @@ const RepresentanteHome = () => {
     { icon: 'alert-circle-outline', label: 'Observaciones', onPress: () => navigation.navigate('Observaciones') },
     { icon: 'create-outline', label: 'Actualizar Datos', onPress: () => navigation.navigate('Actualizar Datos') },
     { icon: 'key-outline', label: 'Cambiar Contraseña', onPress: () => navigation.navigate('Cambiar Contrasena') },
-    { icon: 'notifications-outline', label: 'Notificaciones', onPress: () => navigation.navigate('Notificaciones') }, // Nueva pantalla
+    { icon: 'notifications-outline', label: 'Notificaciones', onPress: () => navigation.navigate('Notificaciones') },
   ];
 
   return (
     <CurvedHeaderLayout
       userName="Representante"
       avatarUrl="https://cdn-icons-png.flaticon.com/512/3884/3884879.png"
-      menuItems={menuItems}
+      content={
+        <View style={{ maxHeight: 500 }}>
+          <ScrollView showsVerticalScrollIndicator={true}>
+            {menuItems.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={item.onPress}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  paddingVertical: 16,
+                  paddingHorizontal: 24,
+                  borderBottomWidth: 1,
+                  borderBottomColor: '#ccc',
+                  backgroundColor: 'white'
+                }}
+              >
+                <Ionicons name={item.icon} size={30} color="#28a745" style={{ marginRight: 16 }} />
+                <Text style={{ fontSize: 16, color: '#333' }}>{item.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      }
     />
   );
 };

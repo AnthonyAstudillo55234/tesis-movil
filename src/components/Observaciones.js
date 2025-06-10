@@ -3,14 +3,14 @@ import {
   View,
   Text,
   ActivityIndicator,
-  ScrollView,
   KeyboardAvoidingView,
-  Platform
+  Platform,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import CurvedHeaderLayout from '../components/CurvedHeaderLayout';
 import styles from '../styles/RepresentanteStyles3.js';
+import { FlatList } from 'react-native';
 
 const ObservacionesEstudiante = () => {
   const [estudiantes, setEstudiantes] = useState([]);
@@ -111,36 +111,36 @@ const ObservacionesEstudiante = () => {
               dropDownContainerStyle={styles.dropdownContainer}
             />
           )}
-
           {selectedEstudiante && (
             loadingObservaciones ? (
               <ActivityIndicator size="large" />
             ) : (
-              <ScrollView>
-                <View style={styles.tableContainer}>
-                  <View style={[styles.tableRow, styles.tableHeader]}>
-                    <Text style={[styles.tableCell, { flex: 2, fontWeight: 'bold' }]}>Observación</Text>
-                    <Text style={[styles.tableCell, { flex: 2, fontWeight: 'bold' }]}>Profesor</Text>
-                    <Text style={[styles.tableCell, { flex: 1, fontWeight: 'bold' }]}>Fecha</Text>
-                  </View>
-
-                  {observaciones.length === 0 ? (
+              <View style={{ maxHeight: 400, marginTop: 20 }}>
+                <FlatList
+                  data={observaciones}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <View style={styles.tableRow}>
+                      <Text style={[styles.tableCell, { flex: 2 }]}>{item.observacion}</Text>
+                      <Text style={[styles.tableCell, { flex: 2 }]}>{item.profesor?.nombre} {item.profesor?.apellido}</Text>
+                      <Text style={[styles.tableCell, { flex: 1 }]}>{item.fecha}</Text>
+                    </View>
+                  )}
+                  ListHeaderComponent={() => (
+                    <View style={[styles.tableRow, styles.tableHeader]}>
+                      <Text style={[styles.tableCell, { flex: 2, fontWeight: 'bold' }]}>Observación</Text>
+                      <Text style={[styles.tableCell, { flex: 2, fontWeight: 'bold' }]}>Profesor</Text>
+                      <Text style={[styles.tableCell, { flex: 1, fontWeight: 'bold' }]}>Fecha</Text>
+                    </View>
+                  )}
+                  ListEmptyComponent={() => (
                     <View style={styles.tableRow}>
                       <Text style={styles.noDataText}>No hay observaciones registradas.</Text>
                     </View>
-                  ) : (
-                    observaciones.map((obs, idx) => (
-                      <View key={idx} style={styles.tableRow}>
-                        <Text style={[styles.tableCell, { flex: 2 }]}>{obs.observacion}</Text>
-                        <Text style={[styles.tableCell, { flex: 2 }]}>
-                          {obs.profesor?.nombre} {obs.profesor?.apellido}
-                        </Text>
-                        <Text style={[styles.tableCell, { flex: 1 }]}>{obs.fecha}</Text>
-                      </View>
-                    ))
                   )}
-                </View>
-              </ScrollView>
+                  showsVerticalScrollIndicator={true}
+                />
+              </View>
             )
           )}
         </KeyboardAvoidingView>

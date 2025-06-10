@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     marginBottom: 16,
-    zIndex: 1000,
+    zIndex: 10,
   },
   row: {
     flexDirection: 'row',

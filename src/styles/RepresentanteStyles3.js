@@ -21,6 +21,7 @@ export default {
       borderColor: '#ddd',
       borderRadius: 4,
       marginTop: 12,
+      marginBlockEnd: 60,
     },
     tableRow: {
       flexDirection: 'row',

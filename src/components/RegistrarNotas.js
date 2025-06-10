@@ -75,7 +75,6 @@ const RegistrarNotas = () => {
       Alert.alert('Error', 'No se pudieron cargar los cursos');
     }
   };
-  
 
   const fetchMaterias = async (cursoId) => {
     try {
@@ -133,22 +132,22 @@ const RegistrarNotas = () => {
       Alert.alert('Error', 'Debes seleccionar un tipo de nota y subir una imagen');
       return false;
     }
-  
+
     if (!cursoSeleccionado || !materiaSeleccionada) {
       Alert.alert('Error', 'Debes seleccionar curso y materia antes de subir la evidencia');
       return false;
     }
-  
+
     try {
       const headersToken = await getHeaders();
       const formData = new FormData();
-        formData.append('imagen', {
-            uri: imagen,
-            name: 'evidencia.jpg',
-            type: 'image/jpeg',
-        });
-        formData.append('tipo', tipoNota ? tipoNota.toString() : '');
-  
+      formData.append('imagen', {
+        uri: imagen,
+        name: 'evidencia.jpg',
+        type: 'image/jpeg',
+      });
+      formData.append('tipo', tipoNota ? tipoNota.toString() : '');
+
       const url = `https://escuela-descubrir.vercel.app/api/subir-evidencia/${materiaSeleccionada}/${cursoSeleccionado}`;
       const res = await fetch(url, {
         method: 'POST',
@@ -158,10 +157,10 @@ const RegistrarNotas = () => {
         },
         body: formData,
       });
-  
+
       const textResponse = await res.text();
       console.log('Respuesta raw del servidor:', textResponse);
-  
+
       if (!res.ok) {
         let errorMessage = textResponse;
         try {
@@ -173,17 +172,16 @@ const RegistrarNotas = () => {
         Alert.alert('Error', `No se pudo subir la imagen: ${errorMessage}`);
         return false;
       }
-  
+
       console.log('Evidencia subida con éxito');
       return true;
-  
     } catch (error) {
       console.error('Excepción en subirEvidencia:', error);
       Alert.alert('Error', 'Error inesperado al subir la imagen');
       return false;
     }
   };
-  
+
   const registrarNotas = async () => {
     if (!imagen) {
       Alert.alert('Error', 'Debes subir una imagen antes de registrar notas');
@@ -197,13 +195,13 @@ const RegistrarNotas = () => {
       Alert.alert('Error', 'Debes seleccionar curso y materia');
       return;
     }
-  
+
     const subida = await subirEvidencia();
     if (!subida) {
       Alert.alert('Error', 'No se pudo subir la imagen');
       return;
     }
-  
+
     const headers = await getHeaders();
     const notasPayload = {};
     estudiantes.forEach((est) => {
@@ -216,13 +214,13 @@ const RegistrarNotas = () => {
         }
       }
     });
-    
+
     console.log('Datos a enviar:', {
       tipo: tipoNota.toLowerCase(),
       notas: notasPayload,
       cursoId: cursoSeleccionado,
     });
-  
+
     try {
       const res = await fetch(
         `https://escuela-descubrir.vercel.app/api/registro-nota/${materiaSeleccionada}`,
@@ -233,13 +231,13 @@ const RegistrarNotas = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            tipo: tipoNota.toLowerCase(), 
+            tipo: tipoNota.toLowerCase(),
             notas: notasPayload,
-            cursoId: cursoSeleccionado, 
+            cursoId: cursoSeleccionado,
           }),
         }
       );
-  
+
       if (!res.ok) {
         const text = await res.text();
         Alert.alert('Error', `No se pudieron registrar las notas: ${text}`);
@@ -253,7 +251,7 @@ const RegistrarNotas = () => {
       Alert.alert('Error', 'Hubo un error al registrar las notas');
     }
   };
-  
+
   useEffect(() => {
     fetchCursos().finally(() => setLoading(false));
   }, []);
@@ -290,13 +288,14 @@ const RegistrarNotas = () => {
         open={openCurso}
         value={cursoSeleccionado}
         setValue={(value) => {
-            console.log('Curso seleccionado en dropdown:', value);
-            setCursoSeleccionado(value);
+          console.log('Curso seleccionado en dropdown:', value);
+          setCursoSeleccionado(value);
         }}
         setItems={setCursos}
         setOpen={setOpenCurso}
         style={styles.dropdown}
         dropDownContainerStyle={styles.dropdownContainer}
+        dropDownMaxHeight={150}
         zIndex={3000}
       />
 
@@ -311,6 +310,7 @@ const RegistrarNotas = () => {
           setOpen={setOpenMateria}
           style={styles.dropdown}
           dropDownContainerStyle={styles.dropdownContainer}
+          dropDownMaxHeight={150}
           zIndex={2000}
         />
       )}
@@ -326,6 +326,7 @@ const RegistrarNotas = () => {
           setOpen={setOpenTipo}
           style={styles.dropdown}
           dropDownContainerStyle={styles.dropdownContainer}
+          dropDownMaxHeight={150}
           zIndex={1000}
         />
       )}
@@ -335,16 +336,20 @@ const RegistrarNotas = () => {
           <TouchableOpacity style={styles.imageButton} onPress={seleccionarImagen}>
             <Text style={styles.imageButtonText}>Subir Imagen</Text>
           </TouchableOpacity>
+
           {imagen && <Image source={{ uri: imagen }} style={styles.imagePreview} />}
 
           <Text style={styles.subtitle}>Lista de Estudiantes</Text>
 
           <FlatList
+            style={{ maxHeight: 400, marginTop: 20 }}
             data={estudiantes}
             keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
               <View style={styles.row}>
-                <Text style={styles.studentName}>{item.nombre} {item.apellido}</Text>
+                <Text style={styles.studentName}>
+                  {item.nombre} {item.apellido}
+                </Text>
                 <TextInput
                   style={styles.inputNota}
                   keyboardType="numeric"
@@ -352,20 +357,21 @@ const RegistrarNotas = () => {
                   placeholder="Nota"
                   value={notas[item._id] ? String(notas[item._id]) : ''}
                   onChangeText={(text) => {
-                    let valor = text.replace(',', '.'); // Acepta coma como separador decimal
+                    let valor = text.replace(',', '.');
                     const regex = /^\d{0,2}(\.\d{0,2})?$/;
-                  
+
                     if (regex.test(valor)) {
                       const numero = parseFloat(valor);
                       if (valor === '' || (numero >= 1 && numero <= 10)) {
                         setNotas((prev) => ({ ...prev, [item._id]: valor }));
                       }
                     }
-                  }}                                                     
+                  }}
                 />
               </View>
             )}
           />
+
           <TouchableOpacity style={styles.registerButton} onPress={registrarNotas}>
             <Text style={styles.registerButtonText}>Registrar Nota</Text>
           </TouchableOpacity>

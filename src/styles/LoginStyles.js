@@ -7,11 +7,10 @@ export const styles = StyleSheet.create({
     padding: 30,
   },
   title: {
-    fontSize: 35,
+    fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
-    padding: 5,
     marginLeft: 75,
     marginRight: 75,
     borderRadius: 10,

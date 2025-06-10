@@ -1,8 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, FlatList, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import styles from '../styles/ActualizarNotasStyles.js'; 
+import styles from '../styles/ActualizarNotasStyles.js';
 
 const ActualizarNotaScreen = () => {
   const [cursos, setCursos] = useState([]);
@@ -42,9 +50,14 @@ const ActualizarNotaScreen = () => {
   useEffect(() => {
     const fetchCursos = async () => {
       try {
-        const data = await fetchConToken('https://escuela-descubrir.vercel.app/api/profesor/cursos');
+        const data = await fetchConToken(
+          'https://escuela-descubrir.vercel.app/api/profesor/cursos'
+        );
         console.log('Cursos recibidos:', data);
-        const items = (data.cursosAsociados || []).map(c => ({ label: c.nombre, value: c.id }));
+        const items = (data.cursosAsociados || []).map((c) => ({
+          label: c.nombre,
+          value: c.id,
+        }));
         setCursos(items);
       } catch (error) {
         console.log('Error cargando cursos:', error);
@@ -57,9 +70,14 @@ const ActualizarNotaScreen = () => {
     if (curso) {
       const fetchMaterias = async () => {
         try {
-          const data = await fetchConToken(`https://escuela-descubrir.vercel.app/api/profesor/${curso}/materias`);
+          const data = await fetchConToken(
+            `https://escuela-descubrir.vercel.app/api/profesor/${curso}/materias`
+          );
           console.log('Materias recibidas:', data);
-          const items = (data.materias || []).map(m => ({ label: m.nombre, value: m.id }));
+          const items = (data.materias || []).map((m) => ({
+            label: m.nombre,
+            value: m.id,
+          }));
           setMaterias(items);
         } catch (error) {
           console.log('Error cargando materias:', error);
@@ -76,9 +94,14 @@ const ActualizarNotaScreen = () => {
     if (materia && tipo) {
       const fetchSubTipos = async () => {
         try {
-          const data = await fetchConToken(`https://escuela-descubrir.vercel.app/api/tipos/${materia}/${tipo}`);
+          const data = await fetchConToken(
+            `https://escuela-descubrir.vercel.app/api/tipos/${materia}/${tipo}`
+          );
           console.log('SubTipos recibidos:', data);
-          const items = (data.descripciones || []).map(d => ({ label: d, value: d }));
+          const items = (data.descripciones || []).map((d) => ({
+            label: d,
+            value: d,
+          }));
           setSubTipos(items);
         } catch (error) {
           console.error('Error cargando subtipos:', error);
@@ -98,14 +121,16 @@ const ActualizarNotaScreen = () => {
       const fetchEstudiantes = async () => {
         try {
           setLoading(true);
-          const data = await fetchConToken(`https://escuela-descubrir.vercel.app/api/estudiantes/${curso}`);
+          const data = await fetchConToken(
+            `https://escuela-descubrir.vercel.app/api/estudiantes/${curso}`
+          );
           console.log('Estudiantes recibidos:', data);
           const listaEstudiantes = data.estudiantes || [];
           setEstudiantes(listaEstudiantes);
 
           // Inicializar notas vacías o mantener actuales si ya hay
           const notasIniciales = {};
-          listaEstudiantes.forEach(e => {
+          listaEstudiantes.forEach((e) => {
             notasIniciales[e._id] = notas[e._id] || '';
           });
           setNotas(notasIniciales);
@@ -127,57 +152,60 @@ const ActualizarNotaScreen = () => {
   const handleChangeNota = (id, value) => {
     // Reemplaza coma por punto
     const nuevoValor = value.replace(',', '.');
-  
+
     // Permitir solo números del 1 al 10, con hasta 2 decimales
     if (/^(10(\.0{0,2})?|[1-9](\.\d{0,2})?)?$/.test(nuevoValor)) {
-      setNotas(prev => ({ ...prev, [id]: nuevoValor }));
+      setNotas((prev) => ({ ...prev, [id]: nuevoValor }));
     }
   };
-  
+
   const actualizarNotas = async () => {
     if (!materia || !tipo || !subTipo) {
       Alert.alert('Error', 'Debes seleccionar materia, tipo y sub-tipo.');
       return;
     }
-  
+
     try {
       const token = await AsyncStorage.getItem('token');
-  
+
       // Construir el objeto data con la estructura esperada:
       const data = {
         tipo: tipo,
         descripcion: subTipo,
         notas: {},
       };
-  
-      estudiantes.forEach(e => {
+
+      estudiantes.forEach((e) => {
         data.notas[e._id] = parseFloat(notas[e._id]) || 0;
       });
-  
+
       console.log('Datos a enviar:', JSON.stringify(data, null, 2));
-  
-      const res = await fetch(`https://escuela-descubrir.vercel.app/api/actualizar-nota/${materia}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      });
-  
+
+      const res = await fetch(
+        `https://escuela-descubrir.vercel.app/api/actualizar-nota/${materia}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
       if (!res.ok) {
         const errorBody = await res.text();
         console.log('Error response:', res.status, errorBody);
         throw new Error('Error en el servidor');
       }
-  
+
       Alert.alert('Éxito', 'Las notas se actualizaron correctamente');
     } catch (error) {
       Alert.alert('Error', 'No se pudieron actualizar las notas');
       console.log('Error actualizando notas:', error);
     }
   };
-  
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Actualizar Notas</Text>
@@ -190,6 +218,7 @@ const ActualizarNotaScreen = () => {
         value={curso}
         setValue={setCurso}
         style={styles.dropdown}
+        dropDownMaxHeight={150}
         zIndex={4000}
       />
 
@@ -201,6 +230,7 @@ const ActualizarNotaScreen = () => {
         value={materia}
         setValue={setMateria}
         style={styles.dropdown}
+        dropDownMaxHeight={150}
         zIndex={3000}
       />
 
@@ -212,6 +242,7 @@ const ActualizarNotaScreen = () => {
         value={tipo}
         setValue={setTipo}
         style={styles.dropdown}
+        dropDownMaxHeight={150}
         zIndex={2000}
       />
 
@@ -224,27 +255,31 @@ const ActualizarNotaScreen = () => {
           value={subTipo}
           setValue={setSubTipo}
           style={styles.dropdown}
+          dropDownMaxHeight={150}
           zIndex={1000}
         />
       )}
 
       {loading ? (
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" style={{ marginTop: 20 }} />
       ) : (
         subTipo && (
           <FlatList
+            style={{ maxHeight: 400, marginTop: 20 }}
             data={estudiantes}
-            keyExtractor={item => item._id}
+            keyExtractor={(item) => item._id}
             renderItem={({ item }) => (
               <View style={styles.row}>
-                <Text style={styles.name}>{item.nombre} {item.apellido}</Text>
+                <Text style={styles.name}>
+                  {item.nombre} {item.apellido}
+                </Text>
                 <TextInput
                   style={styles.input}
                   placeholder="Nota"
                   maxLength={5}
                   keyboardType="decimal-pad"
                   value={notas[item._id]}
-                  onChangeText={value => handleChangeNota(item._id, value)}
+                  onChangeText={(value) => handleChangeNota(item._id, value)}
                 />
               </View>
             )}

@@ -103,78 +103,80 @@ const ActualizarDatos = () => {
           behavior={Platform.OS === 'ios' ? 'padding' : undefined}
           style={styles.formContainer}
         >
-          <ScrollView>
-            <Text style={styles.formTitle}>Actualizar Datos</Text>
+          <View style={{ maxHeight: 500 }}>
+            <ScrollView>
+              <Text style={styles.formTitle}>Actualizar Datos</Text>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Nuevo Nombre</Text>
-              <TextInput
-                style={styles.input}
-                value={nombre}
-                onChangeText={setNombre}
-                placeholder="Escribe tu nuevo nombre"
-                placeholderTextColor="#aaa"
-              />
-            </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Nuevo Nombre</Text>
+                <TextInput
+                  style={styles.input}
+                  value={nombre}
+                  onChangeText={setNombre}
+                  placeholder="Escribe tu nuevo nombre"
+                  placeholderTextColor="#aaa"
+                />
+              </View>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Nuevo Apellido</Text>
-              <TextInput
-                style={styles.input}
-                value={apellido}
-                onChangeText={setApellido}
-                placeholder="Escribe tu nuevo apellido"
-                placeholderTextColor="#aaa"
-              />
-            </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Nuevo Apellido</Text>
+                <TextInput
+                  style={styles.input}
+                  value={apellido}
+                  onChangeText={setApellido}
+                  placeholder="Escribe tu nuevo apellido"
+                  placeholderTextColor="#aaa"
+                />
+              </View>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Nuevo Email</Text>
-              <TextInput
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                placeholder="Escribe tu nuevo email"
-                placeholderTextColor="#aaa"
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-            </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Nuevo Email</Text>
+                <TextInput
+                  style={styles.input}
+                  value={email}
+                  onChangeText={setEmail}
+                  placeholder="Escribe tu nuevo email"
+                  placeholderTextColor="#aaa"
+                  keyboardType="email-address"
+                  autoCapitalize="none"
+                />
+              </View>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Nuevo Teléfono</Text>
-              <TextInput
-                style={styles.input}
-                value={telefono}
-                onChangeText={setTelefono}
-                placeholder="Escribe tu nuevo teléfono"
-                placeholderTextColor="#aaa"
-                keyboardType="phone-pad"
-              />
-            </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Nuevo Teléfono</Text>
+                <TextInput
+                  style={styles.input}
+                  value={telefono}
+                  onChangeText={setTelefono}
+                  placeholder="Escribe tu nuevo teléfono"
+                  placeholderTextColor="#aaa"
+                  keyboardType="phone-pad"
+                />
+              </View>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.label}>Nueva Dirección</Text>
-              <TextInput
-                style={styles.input}
-                value={direccion}
-                onChangeText={setDireccion}
-                placeholder="Escribe tu nueva dirección"
-                placeholderTextColor="#aaa"
-                multiline
-              />
-            </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.label}>Nueva Dirección</Text>
+                <TextInput
+                  style={styles.input}
+                  value={direccion}
+                  onChangeText={setDireccion}
+                  placeholder="Escribe tu nueva dirección"
+                  placeholderTextColor="#aaa"
+                  multiline
+                />
+              </View>
 
-            <TouchableOpacity
-              style={[styles.button, updating && { opacity: 0.7 }]}
-              onPress={handleActualizar}
-              disabled={updating}
-            >
-              <Text style={styles.buttonText}>
-                {updating ? 'Actualizando...' : 'Actualizar'}
-              </Text>
-            </TouchableOpacity>
-          </ScrollView>
+              <TouchableOpacity
+                style={[styles.button, updating && { opacity: 0.7 }]}
+                onPress={handleActualizar}
+                disabled={updating}
+              >
+                <Text style={styles.buttonText}>
+                  {updating ? 'Actualizando...' : 'Actualizar'}
+                </Text>
+              </TouchableOpacity>
+            </ScrollView>
+          </View>
         </KeyboardAvoidingView>
       }
     />

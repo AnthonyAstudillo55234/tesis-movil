@@ -132,6 +132,7 @@ const ObservacionesScreen = () => {
         setValue={setCursoSeleccionado}
         items={cursos}
         style={styles.dropdown}
+        dropDownMaxHeight={150} // 👈 límite de altura con scroll
         zIndex={3000}
       />
 
@@ -139,15 +140,18 @@ const ObservacionesScreen = () => {
         <ActivityIndicator size="large" />
       ) : (
         <FlatList
+          style={{ maxHeight: 400, marginTop: 10 }} // 👈 altura máxima con scroll
           data={estudiantes}
           keyExtractor={(item) => item._id}
           renderItem={renderItem}
           ListEmptyComponent={() => (
-            <Text style={{ marginTop: 20, textAlign: 'center' }}>No hay estudiantes para este curso</Text>
+            <Text style={{ marginTop: 20, textAlign: 'center' }}>
+              No hay estudiantes para este curso
+            </Text>
           )}
         />
       )}
-
+      
       {/* Modal para ingresar observación */}
       <Modal
             visible={modalVisible}
