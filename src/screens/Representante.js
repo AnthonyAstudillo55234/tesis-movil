@@ -43,6 +43,21 @@ const RepresentanteHome = () => {
                 <Text style={{ fontSize: 16, color: '#333' }}>{item.label}</Text>
               </TouchableOpacity>
             ))}
+            {/* Botón de Cerrar Sesión */}
+            <TouchableOpacity
+              onPress={() => navigation.reset({ index: 0, routes: [{ name: 'Login' }] })}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: 16,
+                paddingHorizontal: 24,
+                borderTopColor: '#ccc',
+                backgroundColor: 'white',
+              }}
+            >
+              <Ionicons name="log-out-outline" size={30} color="red" style={{ marginRight: 16 }} />
+              <Text style={{ fontSize: 16, color: 'red' }}>Cerrar Sesión</Text>
+            </TouchableOpacity>
           </ScrollView>
         </View>
       }

@@ -11,10 +11,13 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Checkbox from 'expo-checkbox';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { styles } from '../styles/AdminStyles';
 
 const AdminAttendanceScreen = () => {
+  const navigation = useNavigation();
   const [cursos, setCursos] = useState([]);
   const [estudiantes, setEstudiantes] = useState([]);
   const [selectedCurso, setSelectedCurso] = useState(null);
@@ -123,104 +126,116 @@ const AdminAttendanceScreen = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-        style={{ flex: 1, padding: 16, backgroundColor: '#fff' }} // 👈 Fondo blanco
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}
-      >
-        <View style={{ flex: 1 }}>
-          <Text style={styles.title}>Registro de Asistencia</Text>
-
-          <DropDownPicker
-            open={openCursos}
-            value={selectedCurso}
-            items={itemsCursos}
-            setOpen={setOpenCursos}
-            setValue={setSelectedCurso}
-            setItems={setItemsCursos}
-            placeholder="Selecciona un curso"
-            style={{
-              borderColor: '#0a0a0a',
-              borderRadius: 8,
-              marginVertical: 10,
-              paddingHorizontal: 10,
-              backgroundColor: '#fff',
-            }}
-            dropDownContainerStyle={{
-              borderColor: '#0a0a0a',
-              borderRadius: 8,
-              backgroundColor: '#fff',
-            }}
-            dropDownMaxHeight={150} // 👈 Altura máxima con scroll
-          />
-
-          <ScrollView
-            style={{ flex: 1, marginTop: 20, maxHeight: 400 }} // 👈 Scroll con altura limitada
-            nestedScrollEnabled={true}
-            keyboardShouldPersistTaps="handled"
+    <ScrollView  
+      contentContainerStyle={{ paddingBottom: 10 }} 
+      keyboardShouldPersistTaps="handled"
+    >
+      <KeyboardAvoidingView
+          style={{ flex: 1, padding: 16, backgroundColor: '#fff', marginTop: 25}} // 👈 Fondo blanco
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          keyboardVerticalOffset={Platform.OS === 'android' ? 100 : 0}
+        >
+          <View style={{ flex: 1 }}>
+          <TouchableOpacity
+            style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}
+            onPress={() => navigation.navigate('Login')}
           >
-            {estudiantes.length > 0 && (
-              <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 8 }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    backgroundColor: '#28a745',
-                    paddingVertical: 10,
-                    paddingHorizontal: 10,
-                    borderTopLeftRadius: 8,
-                    borderTopRightRadius: 8,
-                  }}
-                >
-                  <Text style={{ flex: 2, color: 'white', fontWeight: 'bold' }}>Estudiante</Text>
-                  <Text style={{ flex: 1, color: 'white', fontWeight: 'bold', textAlign: 'center' }}>
-                    Asistencia
-                  </Text>
-                </View>
+            <Ionicons name="arrow-back" size={24} color="black" />
+            <Text style={{ marginLeft: 5, fontSize: 16 }}>Volver</Text>
+          </TouchableOpacity>
+            <Text style={styles.title}>Registro de Asistencia</Text>
 
-                {estudiantes.map((estudiante) => (
+            <DropDownPicker
+              open={openCursos}
+              value={selectedCurso}
+              items={itemsCursos}
+              setOpen={setOpenCursos}
+              setValue={setSelectedCurso}
+              setItems={setItemsCursos}
+              placeholder="Selecciona un curso"
+              style={{
+                borderColor: '#0a0a0a',
+                borderRadius: 8,
+                marginVertical: 10,
+                paddingHorizontal: 10,
+                backgroundColor: '#fff',
+              }}
+              dropDownContainerStyle={{
+                borderColor: '#0a0a0a',
+                borderRadius: 8,
+                backgroundColor: '#fff',
+              }}
+              dropDownMaxHeight={150} // 👈 Altura máxima con scroll
+            />
+
+            <ScrollView
+              style={{ flex: 1, marginTop: 20, maxHeight: 400 }} // 👈 Scroll con altura limitada
+              nestedScrollEnabled={true}
+              keyboardShouldPersistTaps="handled"
+            >
+              {estudiantes.length > 0 && (
+                <View style={{ borderWidth: 1, borderColor: '#ccc', borderRadius: 8 }}>
                   <View
-                    key={estudiante._id}
                     style={{
                       flexDirection: 'row',
-                      paddingVertical: 12,
+                      backgroundColor: '#28a745',
+                      paddingVertical: 10,
                       paddingHorizontal: 10,
-                      borderBottomWidth: 1,
-                      borderBottomColor: '#ddd',
-                      backgroundColor: asistencias[estudiante._id] ? '#e6f0ff' : 'white',
-                      alignItems: 'center',
+                      borderTopLeftRadius: 8,
+                      borderTopRightRadius: 8,
                     }}
                   >
-                    <Text style={{ flex: 2 }}>
-                      {estudiante.nombre} {estudiante.apellido}
+                    <Text style={{ flex: 2, color: 'white', fontWeight: 'bold' }}>Estudiante</Text>
+                    <Text style={{ flex: 1, color: 'white', fontWeight: 'bold', textAlign: 'center' }}>
+                      Asistencia
                     </Text>
+                  </View>
+
+                  {estudiantes.map((estudiante) => (
                     <View
+                      key={estudiante._id}
                       style={{
-                        flex: 1,
-                        alignItems: 'center',
                         flexDirection: 'row',
-                        justifyContent: 'center',
+                        paddingVertical: 12,
+                        paddingHorizontal: 10,
+                        borderBottomWidth: 1,
+                        borderBottomColor: '#ddd',
+                        backgroundColor: asistencias[estudiante._id] ? '#e6f0ff' : 'white',
+                        alignItems: 'center',
                       }}
                     >
-                      <Checkbox
-                        value={asistencias[estudiante._id]}
-                        onValueChange={() => toggleAsistencia(estudiante._id)}
-                        color={asistencias[estudiante._id] ? '#007AFF' : undefined}
-                      />
-                      <Text style={{ marginLeft: 8 }}>
-                        {asistencias[estudiante._id] ? 'Presente' : 'Ausente'}
+                      <Text style={{ flex: 2 }}>
+                        {estudiante.nombre} {estudiante.apellido}
                       </Text>
+                      <View
+                        style={{
+                          flex: 1,
+                          alignItems: 'center',
+                          flexDirection: 'row',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Checkbox
+                          value={asistencias[estudiante._id]}
+                          onValueChange={() => toggleAsistencia(estudiante._id)}
+                          color={asistencias[estudiante._id] ? '#007AFF' : undefined}
+                        />
+                        <Text style={{ marginLeft: 8 }}>
+                          {asistencias[estudiante._id] ? 'Presente' : 'Ausente'}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                ))}
-              </View>
-            )}
-          </ScrollView>
+                  ))}
+                </View>
+              )}
+            </ScrollView>
 
-          <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-            <Text style={styles.buttonText}>Registrar Asistencias</Text>
-          </TouchableOpacity>
-      </View>
-    </KeyboardAvoidingView>
+            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+              <Text style={styles.buttonText}>Registrar Asistencias</Text>
+            </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 

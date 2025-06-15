@@ -9,11 +9,15 @@ import {
   Image,
   ActivityIndicator,
   Platform,
+  ScrollView
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../styles/RegistrarNotasStyles.js';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
 
 const tiposNotas = [
   { label: 'Deberes', value: 'deberes' },
@@ -23,6 +27,7 @@ const tiposNotas = [
 ];
 
 const RegistrarNotas = () => {
+  const navigation = useNavigation();
   const [cursos, setCursos] = useState([]);
   const [materias, setMaterias] = useState([]);
   const [estudiantes, setEstudiantes] = useState([]);
@@ -279,105 +284,118 @@ const RegistrarNotas = () => {
   if (loading) return <ActivityIndicator size="large" style={{ marginTop: 40 }} />;
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Registrar Nota</Text>
+    <ScrollView 
+      style={styles.container} 
+      contentContainerStyle={{ paddingBottom: 10 }} 
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}
+          onPress={() => navigation.navigate('Profesor')}
+        >
+          <Ionicons name="arrow-back" size={24} color="black" />
+          <Text style={{ marginLeft: 5, fontSize: 16 }}>Volver</Text>
+        </TouchableOpacity>
+        <Text style={styles.title}>Registrar Nota</Text>
 
-      <DropDownPicker
-        placeholder="Selecciona un curso"
-        items={cursos}
-        open={openCurso}
-        value={cursoSeleccionado}
-        setValue={(value) => {
-          console.log('Curso seleccionado en dropdown:', value);
-          setCursoSeleccionado(value);
-        }}
-        setItems={setCursos}
-        setOpen={setOpenCurso}
-        style={styles.dropdown}
-        dropDownContainerStyle={styles.dropdownContainer}
-        dropDownMaxHeight={150}
-        zIndex={3000}
-      />
-
-      {cursoSeleccionado && (
         <DropDownPicker
-          placeholder="Selecciona una materia"
-          items={materias}
-          open={openMateria}
-          value={materiaSeleccionada}
-          setValue={setMateriaSeleccionada}
-          setItems={setMaterias}
-          setOpen={setOpenMateria}
+          placeholder="Selecciona un curso"
+          items={cursos}
+          open={openCurso}
+          value={cursoSeleccionado}
+          setValue={(value) => {
+            console.log('Curso seleccionado en dropdown:', value);
+            setCursoSeleccionado(value);
+          }}
+          setItems={setCursos}
+          setOpen={setOpenCurso}
           style={styles.dropdown}
           dropDownContainerStyle={styles.dropdownContainer}
           dropDownMaxHeight={150}
-          zIndex={2000}
+          zIndex={3000}
         />
-      )}
 
-      {materiaSeleccionada && (
-        <DropDownPicker
-          placeholder="Selecciona el tipo de nota"
-          items={tiposNotas}
-          open={openTipo}
-          value={tipoNota}
-          setValue={setTipoNota}
-          setItems={() => {}}
-          setOpen={setOpenTipo}
-          style={styles.dropdown}
-          dropDownContainerStyle={styles.dropdownContainer}
-          dropDownMaxHeight={150}
-          zIndex={1000}
-        />
-      )}
-
-      {estudiantes.length > 0 && tipoNota && (
-        <>
-          <TouchableOpacity style={styles.imageButton} onPress={seleccionarImagen}>
-            <Text style={styles.imageButtonText}>Subir Imagen</Text>
-          </TouchableOpacity>
-
-          {imagen && <Image source={{ uri: imagen }} style={styles.imagePreview} />}
-
-          <Text style={styles.subtitle}>Lista de Estudiantes</Text>
-
-          <FlatList
-            style={{ maxHeight: 400, marginTop: 20 }}
-            data={estudiantes}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => (
-              <View style={styles.row}>
-                <Text style={styles.studentName}>
-                  {item.nombre} {item.apellido}
-                </Text>
-                <TextInput
-                  style={styles.inputNota}
-                  keyboardType="numeric"
-                  maxLength={5}
-                  placeholder="Nota"
-                  value={notas[item._id] ? String(notas[item._id]) : ''}
-                  onChangeText={(text) => {
-                    let valor = text.replace(',', '.');
-                    const regex = /^\d{0,2}(\.\d{0,2})?$/;
-
-                    if (regex.test(valor)) {
-                      const numero = parseFloat(valor);
-                      if (valor === '' || (numero >= 1 && numero <= 10)) {
-                        setNotas((prev) => ({ ...prev, [item._id]: valor }));
-                      }
-                    }
-                  }}
-                />
-              </View>
-            )}
+        {cursoSeleccionado && (
+          <DropDownPicker
+            placeholder="Selecciona una materia"
+            items={materias}
+            open={openMateria}
+            value={materiaSeleccionada}
+            setValue={setMateriaSeleccionada}
+            setItems={setMaterias}
+            setOpen={setOpenMateria}
+            style={styles.dropdown}
+            dropDownContainerStyle={styles.dropdownContainer}
+            dropDownMaxHeight={150}
+            zIndex={2000}
           />
+        )}
 
-          <TouchableOpacity style={styles.registerButton} onPress={registrarNotas}>
-            <Text style={styles.registerButtonText}>Registrar Nota</Text>
-          </TouchableOpacity>
-        </>
-      )}
-    </View>
+        {materiaSeleccionada && (
+          <DropDownPicker
+            placeholder="Selecciona el tipo de nota"
+            items={tiposNotas}
+            open={openTipo}
+            value={tipoNota}
+            setValue={setTipoNota}
+            setItems={() => {}}
+            setOpen={setOpenTipo}
+            style={styles.dropdown}
+            dropDownContainerStyle={styles.dropdownContainer}
+            dropDownMaxHeight={150}
+            zIndex={1000}
+          />
+        )}
+
+        {estudiantes.length > 0 && tipoNota && (
+          <>
+            <TouchableOpacity style={styles.imageButton} onPress={seleccionarImagen}>
+              <Text style={styles.imageButtonText}>Subir Imagen</Text>
+            </TouchableOpacity>
+
+            {imagen && <Image source={{ uri: imagen }} style={styles.imagePreview} />}
+
+            <Text style={styles.subtitle}>Lista de Estudiantes</Text>
+
+            <FlatList
+              style={{ maxHeight: 400, marginTop: 20 }}
+              data={estudiantes}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => (
+                <View style={styles.row}>
+                  <Text style={styles.studentName}>
+                    {item.nombre} {item.apellido}
+                  </Text>
+                  <TextInput
+                    style={styles.inputNota}
+                    keyboardType="numeric"
+                    maxLength={5}
+                    placeholder="Nota"
+                    value={notas[item._id] ? String(notas[item._id]) : ''}
+                    onChangeText={(text) => {
+                      let valor = text.replace(',', '.');
+                      const regex = /^\d{0,2}(\.\d{0,2})?$/;
+
+                      if (regex.test(valor)) {
+                        const numero = parseFloat(valor);
+                        if (valor === '' || (numero >= 1 && numero <= 10)) {
+                          setNotas((prev) => ({ ...prev, [item._id]: valor }));
+                        }
+                      }
+                    }}
+                  />
+                </View>
+              )}
+            />
+
+            <TouchableOpacity style={styles.registerButton} onPress={registrarNotas}>
+              <Text style={styles.registerButtonText}>Registrar Nota</Text>
+            </TouchableOpacity>
+          </>
+        )}
+      </View>
+    </ScrollView>
   );
 };
 

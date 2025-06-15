@@ -45,25 +45,28 @@ const App = () => {
         />
 
         {/* Admin */}
-        <Stack.Screen name="Admin" component={AdminScreen} />
+        <Stack.Screen name="Admin" component={AdminScreen} options={{ headerShown: false }}/>
 
         {/* Representante */}
-        <Stack.Screen name="Representante" component={RepresentanteHome} />
-        <Stack.Screen name="Estudiantes Asignados" component={EstudiantesAsignados} />
-        <Stack.Screen name="Calificaciones" component={Calificaciones} />
-        <Stack.Screen name="Asistencias" component={Asistencias} />
-        <Stack.Screen name="Observaciones" component={Observaciones} />
-        <Stack.Screen name="Perfil" component={RepresentantePerfil} />
-        <Stack.Screen name="Actualizar Datos" component={ActualizarDatos} />
-        <Stack.Screen name="Cambiar Contrasena" component={CambiarPassword} />
-        <Stack.Screen name="Notificaciones" component={Notificaciones} />
+        <Stack.Screen 
+          name="Representante" component={RepresentanteHome}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="Estudiantes Asignados" component={EstudiantesAsignados} options={{ headerShown: false }}/>
+        <Stack.Screen name="Calificaciones" component={Calificaciones} options={{ headerShown: false }}/>
+        <Stack.Screen name="Asistencias" component={Asistencias} options={{ headerShown: false }}/>
+        <Stack.Screen name="Observaciones" component={Observaciones} options={{ headerShown: false }}/>
+        <Stack.Screen name="Perfil" component={RepresentantePerfil} options={{ headerShown: false }}/>
+        <Stack.Screen name="Actualizar Datos" component={ActualizarDatos} options={{ headerShown: false }}/>
+        <Stack.Screen name="Cambiar Contrasena" component={CambiarPassword} options={{ headerShown: false }}/>
+        <Stack.Screen name="Notificaciones" component={Notificaciones}/>
 
         {/* Profesor */}
-        <Stack.Screen name="Profesor" component={ProfesorHome} />
-        <Stack.Screen name="Profesor Perfil" component={ProfesorPerfil} />
-        <Stack.Screen name="Registrar Notas" component={RegistrarNotas} />
-        <Stack.Screen name="Actualizar Notas" component={ActualizarNotas} />
-        <Stack.Screen name="Registrar Observaciones" component={RegistrarObservaciones} />
+        <Stack.Screen name="Profesor" component={ProfesorHome} options={{ headerShown: false }}/>
+        <Stack.Screen name="Profesor Perfil" component={ProfesorPerfil} options={{ headerShown: false }}/>
+        <Stack.Screen name="Registrar Notas" component={RegistrarNotas} options={{ headerShown: false }}/>
+        <Stack.Screen name="Actualizar Notas" component={ActualizarNotas} options={{ headerShown: false }}/>
+        <Stack.Screen name="Registrar Observaciones" component={RegistrarObservaciones} options={{ headerShown: false }}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

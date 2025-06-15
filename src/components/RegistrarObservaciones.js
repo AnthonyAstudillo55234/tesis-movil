@@ -8,12 +8,16 @@ import {
   Modal,
   Alert,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../styles/ObservacionesStyles.js';
+import { useNavigation } from '@react-navigation/native';
+import { Ionicons } from '@expo/vector-icons';
 
 const ObservacionesScreen = () => {
+  const navigation = useNavigation();
   const [cursos, setCursos] = useState([]);
   const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
   const [openCurso, setOpenCurso] = useState(false);
@@ -121,81 +125,93 @@ const ObservacionesScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Registrar Observaciones</Text>
+    <ScrollView  
+      contentContainerStyle={{ paddingBottom: 10 }} 
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}
+          onPress={() => navigation.navigate('Profesor')}
+        >
+          <Ionicons name="arrow-back" size={24} color="black" />
+          <Text style={{ marginLeft: 5, fontSize: 16 }}>Volver</Text>
+        </TouchableOpacity>
+        <Text style={styles.title}>Registrar Observaciones</Text>
 
-      <DropDownPicker
-        placeholder="Selecciona un curso"
-        open={openCurso}
-        setOpen={setOpenCurso}
-        value={cursoSeleccionado}
-        setValue={setCursoSeleccionado}
-        items={cursos}
-        style={styles.dropdown}
-        dropDownMaxHeight={150} // 👈 límite de altura con scroll
-        zIndex={3000}
-      />
-
-      {loading ? (
-        <ActivityIndicator size="large" />
-      ) : (
-        <FlatList
-          style={{ maxHeight: 400, marginTop: 10 }} // 👈 altura máxima con scroll
-          data={estudiantes}
-          keyExtractor={(item) => item._id}
-          renderItem={renderItem}
-          ListEmptyComponent={() => (
-            <Text style={{ marginTop: 20, textAlign: 'center' }}>
-              No hay estudiantes para este curso
-            </Text>
-          )}
+        <DropDownPicker
+          placeholder="Selecciona un curso"
+          open={openCurso}
+          setOpen={setOpenCurso}
+          value={cursoSeleccionado}
+          setValue={setCursoSeleccionado}
+          items={cursos}
+          style={styles.dropdown}
+          dropDownMaxHeight={150} // 👈 límite de altura con scroll
+          zIndex={3000}
         />
-      )}
-      
-      {/* Modal para ingresar observación */}
-      <Modal
-            visible={modalVisible}
-            animationType="slide"
-            transparent={true}
-            onRequestClose={() => setModalVisible(false)}
-            >
-            <View style={styles.modalOverlay}>
-                <View style={styles.modalContent}>
-                <Text style={styles.modalTitle}>
-                    Observación para {estudianteSeleccionado?.nombre} {estudianteSeleccionado?.apellido}
-                </Text>
 
-                {/* Campo de cédula (solo lectura) */}
-                <Text style={styles.label}>Cédula:</Text>
-                <TextInput
-                    style={[styles.textInput, { backgroundColor: '#eee' }]}
-                    value={estudianteSeleccionado?.cedula}
-                    editable={false}
-                />
+        {loading ? (
+          <ActivityIndicator size="large" />
+        ) : (
+          <FlatList
+            style={{ maxHeight: 400, marginTop: 10 }} // 👈 altura máxima con scroll
+            data={estudiantes}
+            keyExtractor={(item) => item._id}
+            renderItem={renderItem}
+            ListEmptyComponent={() => (
+              <Text style={{ marginTop: 20, textAlign: 'center' }}>
+                No hay estudiantes para este curso
+              </Text>
+            )}
+          />
+        )}
+        
+        {/* Modal para ingresar observación */}
+        <Modal
+              visible={modalVisible}
+              animationType="slide"
+              transparent={true}
+              onRequestClose={() => setModalVisible(false)}
+              >
+              <View style={styles.modalOverlay}>
+                  <View style={styles.modalContent}>
+                  <Text style={styles.modalTitle}>
+                      Observación para {estudianteSeleccionado?.nombre} {estudianteSeleccionado?.apellido}
+                  </Text>
 
-                {/* Campo de observación */}
-                <Text style={styles.label}>Observación:</Text>
-                <TextInput
-                    style={styles.textInput}
-                    multiline
-                    placeholder="Escribe la observación aquí"
-                    value={observacion}
-                    onChangeText={setObservacion}
-                />
+                  {/* Campo de cédula (solo lectura) */}
+                  <Text style={styles.label}>Cédula:</Text>
+                  <TextInput
+                      style={[styles.textInput, { backgroundColor: '#eee' }]}
+                      value={estudianteSeleccionado?.cedula}
+                      editable={false}
+                  />
 
-                {/* Botones */}
-                <View style={styles.modalButtons}>
-                    <TouchableOpacity style={styles.modalButtonCancel} onPress={() => setModalVisible(false)}>
-                    <Text style={styles.buttonText}>Cancelar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.modalButtonSave} onPress={guardarObservacion}>
-                    <Text style={styles.buttonText}>Guardar</Text>
-                    </TouchableOpacity>
-                </View>
-                </View>
-            </View>
-        </Modal>
-    </View>
+                  {/* Campo de observación */}
+                  <Text style={styles.label}>Observación:</Text>
+                  <TextInput
+                      style={styles.textInput}
+                      multiline
+                      placeholder="Escribe la observación aquí"
+                      value={observacion}
+                      onChangeText={setObservacion}
+                  />
+
+                  {/* Botones */}
+                  <View style={styles.modalButtons}>
+                      <TouchableOpacity style={styles.modalButtonCancel} onPress={() => setModalVisible(false)}>
+                      <Text style={styles.buttonText}>Cancelar</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.modalButtonSave} onPress={guardarObservacion}>
+                      <Text style={styles.buttonText}>Guardar</Text>
+                      </TouchableOpacity>
+                  </View>
+                  </View>
+              </View>
+          </Modal>
+      </View>
+    </ScrollView>
   );
 };
 

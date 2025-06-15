@@ -48,7 +48,7 @@ const RecuperarPassword = () => {
       resizeMode="cover"
     >
       <View style={styles.container}>
-        <Text style={styles.title}>Recuperar Contraseña</Text>
+        <Text style={styles.title}></Text>
 
         <TextInput
           style={styles.input}

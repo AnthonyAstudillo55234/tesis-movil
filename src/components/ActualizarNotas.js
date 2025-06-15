@@ -7,12 +7,16 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Alert,
+  ScrollView
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../styles/ActualizarNotasStyles.js';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 const ActualizarNotaScreen = () => {
+  const navigation = useNavigation();
   const [cursos, setCursos] = useState([]);
   const [materias, setMaterias] = useState([]);
   const [tipos] = useState([
@@ -207,90 +211,102 @@ const ActualizarNotaScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Actualizar Notas</Text>
+    <ScrollView  
+      contentContainerStyle={{ paddingBottom: 10 }} 
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.container}>
+        <TouchableOpacity
+          style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }}
+          onPress={() => navigation.navigate('Profesor')}
+        >
+          <Ionicons name="arrow-back" size={24} color="black" />
+          <Text style={{ marginLeft: 5, fontSize: 16 }}>Volver</Text>
+        </TouchableOpacity>
+        <Text style={styles.title}>Actualizar Notas</Text>
 
-      <DropDownPicker
-        placeholder="Selecciona un curso"
-        items={cursos}
-        open={openCurso}
-        setOpen={setOpenCurso}
-        value={curso}
-        setValue={setCurso}
-        style={styles.dropdown}
-        dropDownMaxHeight={150}
-        zIndex={4000}
-      />
-
-      <DropDownPicker
-        placeholder="Selecciona una materia"
-        items={materias}
-        open={openMateria}
-        setOpen={setOpenMateria}
-        value={materia}
-        setValue={setMateria}
-        style={styles.dropdown}
-        dropDownMaxHeight={150}
-        zIndex={3000}
-      />
-
-      <DropDownPicker
-        placeholder="Selecciona tipo de nota"
-        items={tipos}
-        open={openTipo}
-        setOpen={setOpenTipo}
-        value={tipo}
-        setValue={setTipo}
-        style={styles.dropdown}
-        dropDownMaxHeight={150}
-        zIndex={2000}
-      />
-
-      {tipo && (
         <DropDownPicker
-          placeholder="Selecciona sub-tipo"
-          items={subTipos}
-          open={openSubTipo}
-          setOpen={setOpenSubTipo}
-          value={subTipo}
-          setValue={setSubTipo}
+          placeholder="Selecciona un curso"
+          items={cursos}
+          open={openCurso}
+          setOpen={setOpenCurso}
+          value={curso}
+          setValue={setCurso}
           style={styles.dropdown}
           dropDownMaxHeight={150}
-          zIndex={1000}
+          zIndex={4000}
         />
-      )}
 
-      {loading ? (
-        <ActivityIndicator size="large" style={{ marginTop: 20 }} />
-      ) : (
-        subTipo && (
-          <FlatList
-            style={{ maxHeight: 400, marginTop: 20 }}
-            data={estudiantes}
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => (
-              <View style={styles.row}>
-                <Text style={styles.name}>
-                  {item.nombre} {item.apellido}
-                </Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Nota"
-                  maxLength={5}
-                  keyboardType="decimal-pad"
-                  value={notas[item._id]}
-                  onChangeText={(value) => handleChangeNota(item._id, value)}
-                />
-              </View>
-            )}
+        <DropDownPicker
+          placeholder="Selecciona una materia"
+          items={materias}
+          open={openMateria}
+          setOpen={setOpenMateria}
+          value={materia}
+          setValue={setMateria}
+          style={styles.dropdown}
+          dropDownMaxHeight={150}
+          zIndex={3000}
+        />
+
+        <DropDownPicker
+          placeholder="Selecciona tipo de nota"
+          items={tipos}
+          open={openTipo}
+          setOpen={setOpenTipo}
+          value={tipo}
+          setValue={setTipo}
+          style={styles.dropdown}
+          dropDownMaxHeight={150}
+          zIndex={2000}
+        />
+
+        {tipo && (
+          <DropDownPicker
+            placeholder="Selecciona sub-tipo"
+            items={subTipos}
+            open={openSubTipo}
+            setOpen={setOpenSubTipo}
+            value={subTipo}
+            setValue={setSubTipo}
+            style={styles.dropdown}
+            dropDownMaxHeight={150}
+            zIndex={1000}
           />
-        )
-      )}
+        )}
 
-      <TouchableOpacity style={styles.button} onPress={actualizarNotas}>
-        <Text style={styles.buttonText}>Actualizar Notas</Text>
-      </TouchableOpacity>
-    </View>
+        {loading ? (
+          <ActivityIndicator size="large" style={{ marginTop: 20 }} />
+        ) : (
+          subTipo && (
+            <FlatList
+              style={{ maxHeight: 400, marginTop: 20 }}
+              data={estudiantes}
+              keyExtractor={(item) => item._id}
+              renderItem={({ item }) => (
+                <View style={styles.row}>
+                  <Text style={styles.name}>
+                    {item.nombre} {item.apellido}
+                  </Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Nota"
+                    maxLength={5}
+                    keyboardType="decimal-pad"
+                    value={notas[item._id]}
+                    onChangeText={(value) => handleChangeNota(item._id, value)}
+                  />
+                </View>
+              )}
+            />
+          )
+        )}
+
+        <TouchableOpacity style={styles.button} onPress={actualizarNotas}>
+          <Text style={styles.buttonText}>Actualizar Notas</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 

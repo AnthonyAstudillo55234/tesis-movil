@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -84,68 +85,73 @@ const ObservacionesEstudiante = () => {
   if (!perfil) return <ActivityIndicator size="large" style={{ marginTop: 50 }} />;
 
   return (
-    <CurvedHeaderLayout
-      userName={`${perfil.nombre} ${perfil.apellido}`}
-      avatarUrl="https://cdn-icons-png.flaticon.com/512/3884/3884879.png"
-      showBackButton={true}
-      showViewButton={false}
-      content={
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          style={styles.container}
-        >
-          <Text style={styles.title}>Consultar Observaciones</Text>
+    <ScrollView  
+      contentContainerStyle={{ paddingBottom: 10 }} 
+      keyboardShouldPersistTaps="handled"
+    >
+      <CurvedHeaderLayout
+        userName={`${perfil.nombre} ${perfil.apellido}`}
+        avatarUrl="https://cdn-icons-png.flaticon.com/512/3884/3884879.png"
+        showBackButton={true}
+        showViewButton={false}
+        content={
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            style={styles.container}
+          >
+            <Text style={styles.title}>Consultar Observaciones</Text>
 
-          {loadingEstudiantes ? (
-            <ActivityIndicator size="large" />
-          ) : (
-            <DropDownPicker
-              open={open}
-              value={selectedEstudiante}
-              items={items}
-              setOpen={setOpen}
-              setValue={setSelectedEstudiante}
-              setItems={setItems}
-              placeholder="Selecciona un Estudiante"
-              style={styles.dropdown}
-              dropDownContainerStyle={styles.dropdownContainer}
-            />
-          )}
-          {selectedEstudiante && (
-            loadingObservaciones ? (
+            {loadingEstudiantes ? (
               <ActivityIndicator size="large" />
             ) : (
-              <View style={{ maxHeight: 400, marginTop: 20 }}>
-                <FlatList
-                  data={observaciones}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => (
-                    <View style={styles.tableRow}>
-                      <Text style={[styles.tableCell, { flex: 2 }]}>{item.observacion}</Text>
-                      <Text style={[styles.tableCell, { flex: 2 }]}>{item.profesor?.nombre} {item.profesor?.apellido}</Text>
-                      <Text style={[styles.tableCell, { flex: 1 }]}>{item.fecha}</Text>
-                    </View>
-                  )}
-                  ListHeaderComponent={() => (
-                    <View style={[styles.tableRow, styles.tableHeader]}>
-                      <Text style={[styles.tableCell, { flex: 2, fontWeight: 'bold' }]}>Observación</Text>
-                      <Text style={[styles.tableCell, { flex: 2, fontWeight: 'bold' }]}>Profesor</Text>
-                      <Text style={[styles.tableCell, { flex: 1, fontWeight: 'bold' }]}>Fecha</Text>
-                    </View>
-                  )}
-                  ListEmptyComponent={() => (
-                    <View style={styles.tableRow}>
-                      <Text style={styles.noDataText}>No hay observaciones registradas.</Text>
-                    </View>
-                  )}
-                  showsVerticalScrollIndicator={true}
-                />
-              </View>
-            )
-          )}
-        </KeyboardAvoidingView>
-      }
-    />
+              <DropDownPicker
+                open={open}
+                value={selectedEstudiante}
+                items={items}
+                setOpen={setOpen}
+                setValue={setSelectedEstudiante}
+                setItems={setItems}
+                placeholder="Selecciona un Estudiante"
+                style={styles.dropdown}
+                dropDownContainerStyle={styles.dropdownContainer}
+              />
+            )}
+            {selectedEstudiante && (
+              loadingObservaciones ? (
+                <ActivityIndicator size="large" />
+              ) : (
+                <View style={{ maxHeight: 400, marginTop: 20 }}>
+                  <FlatList
+                    data={observaciones}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+                      <View style={styles.tableRow}>
+                        <Text style={[styles.tableCell, { flex: 2 }]}>{item.observacion}</Text>
+                        <Text style={[styles.tableCell, { flex: 2 }]}>{item.profesor?.nombre} {item.profesor?.apellido}</Text>
+                        <Text style={[styles.tableCell, { flex: 1 }]}>{item.fecha}</Text>
+                      </View>
+                    )}
+                    ListHeaderComponent={() => (
+                      <View style={[styles.tableRow, styles.tableHeader]}>
+                        <Text style={[styles.tableCell, { flex: 2, fontWeight: 'bold' }]}>Observación</Text>
+                        <Text style={[styles.tableCell, { flex: 2, fontWeight: 'bold' }]}>Profesor</Text>
+                        <Text style={[styles.tableCell, { flex: 1, fontWeight: 'bold' }]}>Fecha</Text>
+                      </View>
+                    )}
+                    ListEmptyComponent={() => (
+                      <View style={styles.tableRow}>
+                        <Text style={styles.noDataText}>No hay observaciones registradas.</Text>
+                      </View>
+                    )}
+                    showsVerticalScrollIndicator={true}
+                  />
+                </View>
+              )
+            )}
+          </KeyboardAvoidingView>
+        }
+      />
+    </ScrollView>
   );
 };
 

@@ -89,7 +89,7 @@ const ActualizarDatos = () => {
   }
 
   // Selección de avatar según el rol
-  const avatarUrl = perfil.rol === 'profesor'
+  const avatarUrl = perfil.rol === 'representante'
     ? 'https://cdn-icons-png.flaticon.com/512/3884/3884879.png'
     : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
   return (

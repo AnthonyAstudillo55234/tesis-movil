@@ -89,87 +89,92 @@ const Asistencias = () => {
   }
 
   return (
-    <CurvedHeaderLayout
-      userName={`${perfil.nombre} ${perfil.apellido}`}
-      avatarUrl="https://cdn-icons-png.flaticon.com/512/3884/3884879.png"
-      showBackButton={true}
-      showViewButton={false}
-      content={
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          style={styles.container}
-        >
-          <Text style={styles.title}>Consultar Asistencias</Text>
+    <ScrollView  
+      contentContainerStyle={{ paddingBottom: 10 }} 
+      keyboardShouldPersistTaps="handled"
+    >
+      <CurvedHeaderLayout
+        userName={`${perfil.nombre} ${perfil.apellido}`}
+        avatarUrl="https://cdn-icons-png.flaticon.com/512/3884/3884879.png"
+        showBackButton={true}
+        showViewButton={false}
+        content={
+          <KeyboardAvoidingView
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+            style={styles.container}
+          >
+            <Text style={styles.title}>Consultar Asistencias</Text>
 
-          <DropDownPicker
-            open={openEstudiantes}
-            value={estudianteSeleccionado}
-            items={itemsEstudiantes}
-            setOpen={setOpenEstudiantes}
-            setValue={setEstudianteSeleccionado}
-            setItems={setItemsEstudiantes}
-            placeholder="Selecciona un Estudiante"
-            zIndex={3000}
-            zIndexInverse={1000}
-            containerStyle={{ marginBottom: 20 }}
-          />
-          {loadingAsistencias ? (
-            <ActivityIndicator size="large" />
-          ) : (
-            estudianteSeleccionado && (
-              asistenciasData ? (
-                <>
-                  <View style={{ maxHeight: 400 }}>
-                    <ScrollView showsVerticalScrollIndicator={true}>
-                      <View style={styles.infoContainer}>
-                        <Text style={styles.infoText}>
-                          <Text style={styles.label}>Año Lectivo: </Text>
-                          {asistenciasData.anioLectivo}
-                        </Text>
-                        <Text style={styles.infoText}>
-                          <Text style={styles.label}>Total de Faltas: </Text>
-                          {asistenciasData.totalFaltas}
-                        </Text>
-                      </View>
-
-                      <View style={styles.tableContainer}>
-                        <View style={[styles.tableRow, styles.tableHeader]}>
-                          <Text style={[styles.tableCell, styles.headerCell]}>Fecha</Text>
-                          <Text style={[styles.tableCell, styles.headerCell]}>Presente</Text>
-                          <Text style={[styles.tableCell, styles.headerCell]}>Justificación</Text>
+            <DropDownPicker
+              open={openEstudiantes}
+              value={estudianteSeleccionado}
+              items={itemsEstudiantes}
+              setOpen={setOpenEstudiantes}
+              setValue={setEstudianteSeleccionado}
+              setItems={setItemsEstudiantes}
+              placeholder="Selecciona un Estudiante"
+              zIndex={3000}
+              zIndexInverse={1000}
+              containerStyle={{ marginBottom: 20 }}
+            />
+            {loadingAsistencias ? (
+              <ActivityIndicator size="large" />
+            ) : (
+              estudianteSeleccionado && (
+                asistenciasData ? (
+                  <>
+                    <View style={{ maxHeight: 400 }}>
+                      <ScrollView showsVerticalScrollIndicator={true}>
+                        <View style={styles.infoContainer}>
+                          <Text style={styles.infoText}>
+                            <Text style={styles.label}>Año Lectivo: </Text>
+                            {asistenciasData.anioLectivo}
+                          </Text>
+                          <Text style={styles.infoText}>
+                            <Text style={styles.label}>Total de Faltas: </Text>
+                            {asistenciasData.totalFaltas}
+                          </Text>
                         </View>
 
-                        {asistenciasData.registrosAsistencia.length === 0 ? (
-                          <View style={styles.tableRow}>
-                            <Text style={styles.tableCell}>Sin registros</Text>
+                        <View style={styles.tableContainer}>
+                          <View style={[styles.tableRow, styles.tableHeader]}>
+                            <Text style={[styles.tableCell, styles.headerCell]}>Fecha</Text>
+                            <Text style={[styles.tableCell, styles.headerCell]}>Presente</Text>
+                            <Text style={[styles.tableCell, styles.headerCell]}>Justificación</Text>
                           </View>
-                        ) : (
-                          asistenciasData.registrosAsistencia.map((registro, index) => (
-                            <View key={index} style={styles.tableRow}>
-                              <Text style={styles.tableCell}>{registro.fecha}</Text>
-                              <Text style={styles.tableCell}>{registro.presente ? 'Sí' : 'No'}</Text>
-                              <Text style={styles.tableCell}>
-                                {registro.justificacion
-                                  ? registro.justificacion
-                                  : registro.presente
-                                    ? 'No requiere'
-                                    : 'Falta sin justificación'}
-                              </Text>
+
+                          {asistenciasData.registrosAsistencia.length === 0 ? (
+                            <View style={styles.tableRow}>
+                              <Text style={styles.tableCell}>Sin registros</Text>
                             </View>
-                          ))
-                        )}
-                      </View>
-                    </ScrollView>
-                  </View>
-                </>
-              ) : (
-                <Text style={{ marginTop: 20 }}>No se encontraron datos de asistencia para este estudiante.</Text>
+                          ) : (
+                            asistenciasData.registrosAsistencia.map((registro, index) => (
+                              <View key={index} style={styles.tableRow}>
+                                <Text style={styles.tableCell}>{registro.fecha}</Text>
+                                <Text style={styles.tableCell}>{registro.presente ? 'Sí' : 'No'}</Text>
+                                <Text style={styles.tableCell}>
+                                  {registro.justificacion
+                                    ? registro.justificacion
+                                    : registro.presente
+                                      ? 'No requiere'
+                                      : 'Falta sin justificación'}
+                                </Text>
+                              </View>
+                            ))
+                          )}
+                        </View>
+                      </ScrollView>
+                    </View>
+                  </>
+                ) : (
+                  <Text style={{ marginTop: 20 }}>No se encontraron datos de asistencia para este estudiante.</Text>
+                )
               )
-            )
-          )}
-        </KeyboardAvoidingView>
-      }
-    />
+            )}
+          </KeyboardAvoidingView>
+        }
+      />
+    </ScrollView>
   );
 };
 
